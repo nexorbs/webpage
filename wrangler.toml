@@ -3,7 +3,7 @@ name = "nexorbs"
 compatibility_date = "2025-01-09"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./dist"
-
+account_id = "1332eccddd2e9e8680079d71ff2b902e" 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Pages Function, running it closer to your back-end infrastructure
 # rather than the end user may result in better performance.
