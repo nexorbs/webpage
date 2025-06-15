@@ -34,7 +34,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: npm run build-only
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
