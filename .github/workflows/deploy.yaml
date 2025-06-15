@@ -12,7 +12,6 @@ on:
       - '.github/workflows/deploy.yml'
       - 'package.json'
       - 'tsconfig.json'
-      - 'tailwind.config.js'
       - 'public/**'
       - 'src/**'
 
