@@ -6,9 +6,9 @@ import { RouterView } from 'vue-router'
   <main class="bg-nexBlack text-nexWhite min-h-screen flex items-center justify-center">
     <div class="container mx-auto px-4 py-8">
       <!-- Header Section -->
-      <div class="flex justify-center items-center mb-8">
-        <img src="/logo.svg" alt="NexOrbs Logo" class="w-20 h-20 mr-4" />
-        <h1 class="text-7xl font-bold">NEXORBS</h1>
+      <div class="flex flex-col sm:flex-row justify-center items-center mb-8 text-center sm:text-left">
+        <img src="/logo.svg" alt="NexOrbs Logo" class="w-16 h-16 sm:w-20 sm:h-20 mb-4 sm:mb-0 sm:mr-4" />
+        <h1 class="text-4xl sm:text-7xl font-bold">NEXORBS</h1>
       </div>
 
       <!-- Main Content -->
