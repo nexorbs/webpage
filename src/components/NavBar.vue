@@ -58,7 +58,7 @@ onUnmounted(() => {
           </button>
         </nav>
 
-        <button class="md:hidden text-white" @click="isMenuOpen = !isMenuOpen">
+        <button name="toggle menu" class="md:hidden text-white" @click="isMenuOpen = !isMenuOpen">
           <Bars3Icon v-if="!isMenuOpen" class="size-6" />
           <XMarkIcon v-else class="size-6" />
         </button>
