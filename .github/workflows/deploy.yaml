@@ -4,11 +4,12 @@ env:
   PROJECT_NAME: nexorbs-webpage
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/deploy.yml'
+      - '.github/workflows/deploy.yaml'
       - 'package.json'
       - 'tsconfig.json'
       - 'public/**'
