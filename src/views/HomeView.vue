@@ -16,10 +16,10 @@ const steps = [
     id="hero"
     class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
   >
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
       <!-- Chip -->
       <div
-        class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-6 sm:mb-8 mt-16 sm:mt-0"
+        class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-6 sm:mb-8"
       >
         <BoltIcon class="w-4 h-4 text-white" />
         <span class="text-sm text-gray-300">Tech Solutions &amp; Beyond</span>
@@ -30,7 +30,7 @@ const steps = [
         <img
           src="@/assets/logo.svg"
           alt="NEXORBS Logo"
-          class="w-24 h-24 md:w-32 md:h-32 object-contain"
+          class="md:size-32 object-contain size-24"
           draggable="false"
         />
         <h1 class="text-center md:text-left flex">
