@@ -1,24 +1,14 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
-
-defineProps({
-  label: {
-    type: String,
-    default: 'COMENZAR PROYECTO',
-  },
-  type: {
-    type: String,
-    default: 'button',
-  },
-})
+defineProps<{
+  label?: string
+}>()
 
 defineEmits(['click'])
 </script>
 
 <template>
   <button
-    class="group relative bg-white text-black px-8 py-4 font-semibold transition-all duration-300 hover:bg-gray-100 flex items-center overflow-hidden rounded max-w-xs w-full"
-    :type="type"
+    class="group relative bg-white text-black px-8 py-4 font-semibold transition-all duration-300 hover:bg-gray-100 flex items-center overflow-hidden rounded"
     @click="$emit('click', $event)"
   >
     <span
