@@ -17,25 +17,38 @@ const steps = [
     class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-      <!-- TODO: Arreglar que cuando es mobile, se va muy para arriba este Chip -->
+      <!-- Chip -->
       <div
-        class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-8"
+        class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-6 sm:mb-8 mt-16 sm:mt-0"
       >
         <BoltIcon class="w-4 h-4 text-white" />
         <span class="text-sm text-gray-300">Tech Solutions &amp; Beyond</span>
       </div>
 
-      <div class="flex items-center justify-center space-x-4 mb-6">
-        <img src="@/assets/logo.svg" alt="NEXORBS Logo" class="w-12 h-12" draggable="false" />
-        <h1 className="text-6xl md:text-8xl font-black tracking-tight">
-          <span className="text-white"> NEX </span>
-          <span className="text-white relative">
+      <!-- Logo + Título -->
+      <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-10">
+        <img
+          src="@/assets/logo.svg"
+          alt="NEXORBS Logo"
+          class="w-24 h-24 md:w-32 md:h-32 object-contain"
+          draggable="false"
+        />
+        <h1 class="text-center md:text-left flex">
+          <span
+            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white block"
+          >
+            NEX
+          </span>
+          <span
+            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white relative inline-block"
+          >
             ORBS
-            <div className="absolute -bottom-2 left-0 w-full h-1 bg-white"></div>
+            <div class="absolute -bottom-1 md:-bottom-2 left-0 w-full h-0.5 bg-white"></div>
           </span>
         </h1>
       </div>
 
+      <!-- Descripción -->
       <p
         class="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed font-light"
       >
@@ -43,24 +56,20 @@ const steps = [
         desarrollo web, apps móviles y consultoría especializada.
       </p>
 
+      <!-- Botones -->
       <div
         class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-20"
       >
-        <WhiteButton
-          label="Comenzar Proyecto"
-          icon="ArrowRightIcon"
-          @click="$emit('start-project')"
-          class="w-full sm:w-auto"
-        >
+        <WhiteButton label="Comenzar Proyecto" @click="$emit('start-project')">
           <ArrowRightIcon
-            class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200 relative z-10w-5"
+            class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200 relative z-10"
           />
         </WhiteButton>
 
-        <!-- TODO: Arreglar esto y convertilo a un componente con props -->
-        <BlackButton>Ver nuestro enfoque</BlackButton>
+        <BlackButton label="Ver nuestro enfoque" />
       </div>
 
+      <!-- Pasos -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
         <div v-for="(step, index) in steps" :key="index" class="text-center group">
           <div
