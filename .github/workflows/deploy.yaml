@@ -4,7 +4,6 @@ env:
   PROJECT_NAME: nexorbs-webpage
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -38,13 +37,6 @@ jobs:
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
-        # env:
-        # YOUR_SECRET: ${{ secrets.YOUR_SECRET }}
-        # YOUR_OTHER_SECRET: ${{ secrets.YOUR_OTHER_SECRET }}
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ./dist --project-name "${{ env.PROJECT_NAME }}"
-          # secrets: |
-          #   YOUR_SECRET
-          #   YOUR_OTHER_SECRET
