@@ -23,7 +23,7 @@ const icons = {
 </script>
 <template>
   <div
-    class="group bg-black border border-white/10 p-8 hover:border-white/30 transition-all duration-500 relative overflow-hidden"
+    class="group bg-black border border-white/20 p-8 hover:border-white/40 transition-all duration-500 relative overflow-hidden"
   >
     <div
       class="absolute inset-0 bg-white/5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"

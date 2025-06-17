@@ -20,7 +20,7 @@ const steps = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
       <!-- Chip -->
       <div
-        class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-6 sm:mb-8"
+        class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6 sm:mb-8"
       >
         <BoltIcon class="w-4 h-4 text-white" />
         <span class="text-sm text-gray-300">Tech Solutions &amp; Beyond</span>
@@ -31,7 +31,7 @@ const steps = [
         <img
           src="@/assets/logo.svg"
           alt="NEXORBS Logo"
-          class="md:size-32 object-contain size-24"
+          class="md:size-32 object-contain size-24 select-none"
           draggable="false"
         />
         <h1 class="text-center md:text-left flex">
@@ -76,7 +76,7 @@ const steps = [
           <div
             class="w-8 h-8 border border-white/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:border-white transition-colors duration-300"
           >
-            <span class="text-white text-sm font-bold">{{ index + 1 }}</span>
+            <span class="text-white text-sm font-bold select-none">{{ index + 1 }}</span>
           </div>
           <div class="text-white font-bold text-sm tracking-widest mb-2">
             {{ step.label }}
