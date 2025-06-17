@@ -1,0 +1,11 @@
+.menu-slide-enter-active, .menu-slide-leave-active {
+  transition: transform 0.3s ease-out;
+}
+
+.menu-slide-enter-from, .menu-slide-leave-to {
+  transform: translateY(-100%);
+}
+
+.menu-slide-enter-to {
+  transform: translateY(0);
+}

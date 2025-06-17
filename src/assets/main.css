@@ -5,3 +5,8 @@
   --color-nexWhite: #FAF9F6;
   --color-nexSoftGray: #9ca3af;
 }
+
+h1, h2{
+  font-family: 'Cantarell', 'Helvetica Neue',
+    sans-serif;
+}
