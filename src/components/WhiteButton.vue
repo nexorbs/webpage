@@ -8,7 +8,7 @@ defineEmits(['click'])
 
 <template>
   <button
-    class="group relative bg-white text-black px-8 py-4 font-semibold transition-all duration-300 hover:bg-gray-100 flex items-center overflow-hidden rounded"
+    class="group relative bg-white text-black px-8 py-4 font-semibold transition-all duration-300 hover:bg-gray-100 flex items-center overflow-hidden"
     @click="$emit('click', $event)"
   >
     <span
