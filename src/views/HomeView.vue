@@ -14,7 +14,7 @@ const steps = [
 
 <template>
   <section
-    id="hero"
+    id="home"
     class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
