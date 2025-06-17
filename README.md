@@ -1,39 +1,4 @@
+> [!WARNING]
+> Para contribuir al proyecto, primero crea una issue y completa los campos requeridos en la barra lateral. Después, crea una rama basada en el tipo de issue: usa el prefijo `feature/issue-name` para nuevas funcionalidades o `fix/issue-name` para correcciones. Una vez que termines tu trabajo, haz un Pull Request (PR). El PR debe fusionarse primero en la rama `develop` y luego en `main` para que los cambios se desplieguen en producción.
+
 # webpage
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
