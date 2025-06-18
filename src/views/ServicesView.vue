@@ -56,15 +56,7 @@ const services: {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <ServiceCard
-          v-for="(service, index) in services"
-          :key="index"
-          :icon="service.icon"
-          :highlight="service.highlight"
-          :title="service.title"
-          :description="service.description"
-          :features="service.features"
-        />
+        <ServiceCard v-for="(service, index) in services" :key="index" :service="service" />
       </div>
     </div>
   </section>

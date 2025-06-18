@@ -3,6 +3,7 @@ import { ArrowRightIcon, BoltIcon } from '@heroicons/vue/24/outline'
 import BlackButton from '@/components/BlackButton.vue'
 import WhiteButton from '@/components/WhiteButton.vue'
 import ServicesView from './ServicesView.vue'
+import AboutUsView from './AboutUsView.vue'
 
 const steps = [
   { label: 'ESCUCHAMOS', desc: 'Tus necesidades' },
@@ -81,7 +82,7 @@ const steps = [
           <div class="text-white font-bold text-sm tracking-widest mb-2">
             {{ step.label }}
           </div>
-          <div class="text-gray-500 text-xs">
+          <div class="text-gray-400 text-xs">
             {{ step.desc }}
           </div>
         </div>
@@ -89,4 +90,5 @@ const steps = [
     </div>
   </section>
   <ServicesView />
+  <AboutUsView />
 </template>
