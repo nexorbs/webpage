@@ -7,11 +7,13 @@ import {
 } from '@heroicons/vue/24/outline'
 
 defineProps<{
-  icon: 'CodeBracketIcon' | 'DevicePhoneMobileIcon' | 'LightBulbIcon' | 'Square3Stack3DIcon'
-  title: string
-  description: string
-  features: string[]
-  highlight: string
+  service: {
+    icon: 'CodeBracketIcon' | 'DevicePhoneMobileIcon' | 'LightBulbIcon' | 'Square3Stack3DIcon'
+    title: string
+    description: string
+    features: string[]
+    highlight: string
+  }
 }>()
 
 const icons = {
@@ -35,23 +37,27 @@ const icons = {
           class="size-12 border border-white/20 flex items-center justify-center group-hover:border-white group-hover:bg-white transition-all duration-300"
         >
           <component
-            :is="icons[icon]"
+            :is="icons[service.icon]"
             class="size-6 text-white group-hover:text-black transition-colors duration-300"
           />
         </div>
-        <span class="text-xs text-gray-500 font-medium tracking-widest">
-          {{ highlight.toUpperCase() }}
+        <span class="text-xs text-gray-400 font-medium tracking-widest">
+          {{ service.highlight.toUpperCase() }}
         </span>
       </div>
 
       <h3 class="text-xl font-bold text-white mb-4 tracking-wide">
-        {{ title.toUpperCase() }}
+        {{ service.title.toUpperCase() }}
       </h3>
 
-      <p class="text-gray-400 mb-6 leading-relaxed font-light">{{ description }}</p>
+      <p class="text-gray-400 mb-6 leading-relaxed font-light">{{ service.description }}</p>
 
       <ul class="space-y-2">
-        <li v-for="(feature, index) in features" :key="index" class="flex items-center space-x-3">
+        <li
+          v-for="(feature, index) in service.features"
+          :key="index"
+          class="flex items-center space-x-3"
+        >
           <div class="w-1 h-1 bg-white"></div>
           <span class="text-sm text-gray-300 font-medium">{{ feature }}</span>
         </li>
