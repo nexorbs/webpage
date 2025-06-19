@@ -4,6 +4,8 @@ import BlackButton from '@/components/BlackButton.vue'
 import WhiteButton from '@/components/WhiteButton.vue'
 import ServicesView from './ServicesView.vue'
 import AboutUsView from './AboutUsView.vue'
+import BackgroundOfStars from '@/components/BackgroundOfStars.vue'
+import TechnologiesStack from './TechnologiesStack.vue'
 
 const steps = [
   { label: 'ESCUCHAMOS', desc: 'Tus necesidades' },
@@ -18,6 +20,7 @@ const steps = [
     id="home"
     class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
   >
+    <BackgroundOfStars />
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
       <!-- Chip -->
       <div
@@ -91,4 +94,5 @@ const steps = [
   </section>
   <ServicesView />
   <AboutUsView />
+  <TechnologiesStack />
 </template>
