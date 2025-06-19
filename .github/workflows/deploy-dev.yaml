@@ -1,20 +1,19 @@
-name: Deploy to development
+name: Deploy to develop
 
 env:
   PROJECT_NAME: nexorbs-webpage-dev
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - dev
+      - develop
     paths:
-      - '.github/workflows/deploy-dev.yaml'
+      - '.github/workflows/deploy.yaml'
       - 'package.json'
       - 'tsconfig.json'
       - 'public/**'
       - 'src/**'
-
-  workflow_dispatch:
 
 jobs:
   deploy:
@@ -37,10 +36,9 @@ jobs:
       - name: Build
         run: npm run build-only
 
-      - name: Deploy to dev.nexorbs.com
+      - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           environment: development
-
