@@ -1,0 +1,46 @@
+name: Deploy to development
+
+env:
+  PROJECT_NAME: nexorbs-webpage-dev
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - '.github/workflows/deploy-dev.yaml'
+      - 'package.json'
+      - 'tsconfig.json'
+      - 'public/**'
+      - 'src/**'
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: NodeJS Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+
+      - name: Install Deps
+        run: npm install
+
+      - name: Build
+        run: npm run build-only
+
+      - name: Deploy to dev.nexorbs.com
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          environment: development
+
