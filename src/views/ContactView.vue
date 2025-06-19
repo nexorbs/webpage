@@ -146,7 +146,7 @@ function handleSubmit() {
               </div>
             </div>
 
-            <div>
+            <div class="relative">
               <label
                 htmlFor="project"
                 class="block text-sm font-bold text-white mb-3 tracking-wide"
@@ -157,17 +157,20 @@ function handleSubmit() {
                 id="project"
                 name="project"
                 v-model="formData.project"
-                :class="[
-                  'w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 focus:border-white hover:border-white transition-all duration-200 focus:outline-none',
-                  formData.project.valueOf() === '' ? 'text-gray-500' : 'text-white',
-                ]"
+                class="w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 text-white focus:border-white hover:border-white transition-all duration-200 focus:outline-none"
               >
-                <option value="" hidden class="bg-black">Selecciona una opción</option>
-                <option value="web" class="bg-black">Desarrollo Web</option>
-                <option value="mobile" class="bg-black">Aplicación Móvil</option>
-                <option value="consultoria" class="bg-black">Consultoría Tech</option>
-                <option value="integral" class="bg-black">Solución Integral</option>
+                <option value="" disabled hidden class="bg-black text-white">
+                  Selecciona una opción
+                </option>
+                <option value="web" class="bg-black text-white">Desarrollo Web</option>
+                <option value="mobile" class="bg-black text-white">Aplicación Móvil</option>
+                <option value="consultoria" class="bg-black text-white">Consultoría Tech</option>
+                <option value="integral" class="bg-black text-white">Solución Integral</option>
               </select>
+              <div
+                v-if="formData.project === ''"
+                class="absolute bg-black/50 mb-1 w-full h-12 bottom-0 left-0 z-10 pointer-events-none"
+              ></div>
             </div>
 
             <div>
