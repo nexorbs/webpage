@@ -6,6 +6,7 @@ import ServicesView from './ServicesView.vue'
 import AboutUsView from './AboutUsView.vue'
 import BackgroundOfStars from '@/components/BackgroundOfStars.vue'
 import TechnologiesStack from './TechnologiesStack.vue'
+import ContactView from './ContactView.vue'
 
 const steps = [
   { label: 'ESCUCHAMOS', desc: 'Tus necesidades' },
@@ -95,4 +96,5 @@ const steps = [
   <ServicesView />
   <AboutUsView />
   <TechnologiesStack />
+  <ContactView />
 </template>
