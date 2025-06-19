@@ -1,5 +1,4 @@
 name = "nexorbs-webpage"
-
 compatibility_date = "2025-06-10"
 compatibility_flags = [
   "nodejs_compat",
@@ -21,6 +20,5 @@ name = "nexorbs-webpage-dev"
 [env.development.assets]
 directory = "./dist"
 
-[env.development.routes]
-- pattern = "dev.nexorbs.com/*"
-
+[[env.development.routes]]
+pattern = "dev.nexorbs.com/*"
