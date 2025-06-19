@@ -14,7 +14,7 @@ const icons = { UsersIcon, AdjustmentsVerticalIcon, BoltIcon, TrophyIcon }
 <template>
   <div class="bg-black relative text-white p-6 text-center transition-all duration-300 group">
     <div
-      class="absolute bg-transparent hover:bg-white/10 transition-colors duration-300 inset-0 w-full h-full z-50"
+      class="absolute bg-transparent hover:bg-white/10 transition-colors duration-300 inset-0 w-full h-full z-10"
     ></div>
     <div
       class="w-10 h-10 border border-white/20 flex items-center justify-center mx-auto mb-4 group-hover:border-white transition-colors duration-300"

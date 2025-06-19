@@ -43,7 +43,7 @@ const services: {
 ]
 </script>
 <template>
-  <section id="services" className="py-24 bg-black">
+  <section id="services" className="py-24 max-md:py-16 bg-black">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-20">
         <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">

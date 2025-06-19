@@ -9,10 +9,16 @@ const navItems = ['Inicio', 'Servicios', 'Nosotros', 'Tecnologías', 'Contacto']
 const sectionIds = ['home', 'services', 'about', 'tech', 'contact']
 
 function scrollToSection(sectionId: string) {
-  const element = document.getElementById(sectionId)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-    isMenuOpen.value = false
+  isMenuOpen.value = false
+  const section = document.getElementById(sectionId)
+  const offset = 60 // cantidad de píxeles antes
+  if (section) {
+    const elementTop = section.getBoundingClientRect().top + window.pageYOffset
+
+    window.scrollTo({
+      top: elementTop - offset,
+      behavior: 'smooth',
+    })
   }
 }
 
@@ -32,14 +38,14 @@ onUnmounted(() => {
 <template>
   <header
     :class="[
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 md:bg-black/90 md:backdrop-blur-md',
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 md:bg-black',
       isScrolled ? 'md:border-b md:border-white/20' : '',
     ]"
   >
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
       <div
         :class="[
-          'flex justify-between items-center transition-all duration-300 p-4 max-md:bg-black/90 max-md:backdrop-blur-md',
+          'flex justify-between items-center transition-all duration-300 p-4 sm:px-10 max-md:bg-black',
           isScrolled && !isMenuOpen ? 'max-md:border-b max-md:border-white/20' : '', // Eliminado el -sm si no es una clase de tailwind
         ]"
       >
@@ -70,16 +76,13 @@ onUnmounted(() => {
       <!-- Mobile Menu -->
       <div class="relative overflow-hidden">
         <Transition name="menu-slide">
-          <div
-            v-if="isMenuOpen"
-            class="md:hidden bg-black/90 backdrop-blur-md border-b border-white/20 px-4"
-          >
+          <div v-if="isMenuOpen" class="md:hidden bg-black border-b border-white/20 px-4">
             <nav class="py-4 border-t border-white/20 space-y-2">
               <button
                 v-for="(item, index) in navItems"
                 :key="item"
                 @click.prevent.self="scrollToSection(sectionIds[index])"
-                class="block w-full text-left px-4 py-2 text-gray-400 hover:text-white hover:bg-white/5 transition-colors duration-200"
+                class="block w-full text-left px-4 sm:px-10 py-2 text-gray-400 hover:text-white transition-colors duration-200"
               >
                 {{ item }}
               </button>
