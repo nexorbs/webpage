@@ -7,17 +7,17 @@ const technologies = [
     techs: [
       {
         name: 'Vue.js',
-        icon: './src/assets/Vue.js.svg',
+        icon: './Vue.js.svg',
         description: 'Framework progresivo para interfaces',
       },
       {
         name: 'React.js',
-        icon: './src/assets/React.svg',
+        icon: './React.svg',
         description: 'Biblioteca para interfaces de usuario',
       },
       {
         name: 'TypeScript',
-        icon: './src/assets/TypeScript.svg',
+        icon: './TypeScript.svg',
         description: 'JavaScript con tipado estático',
       },
     ],
@@ -27,12 +27,12 @@ const technologies = [
     techs: [
       {
         name: 'Rust',
-        icon: './src/assets/cuddlyferris.svg',
+        icon: './cuddlyferris.svg',
         description: 'Rendimiento y seguridad extremos',
       },
       {
         name: 'Node.js',
-        icon: './src/assets/Node.js.svg',
+        icon: './Node.js.svg',
         description: 'Runtime de JavaScript del lado servidor',
       },
     ],
@@ -42,12 +42,12 @@ const technologies = [
     techs: [
       {
         name: 'Flutter',
-        icon: './src/assets/Flutter.svg',
+        icon: './Flutter.svg',
         description: 'Framework multiplataforma de Google',
       },
       {
         name: 'React Native',
-        icon: './src/assets/React.svg',
+        icon: './React.svg',
         description: 'Apps nativas con React',
       },
     ],
@@ -57,7 +57,7 @@ const technologies = [
     techs: [
       {
         name: 'Cloudflare',
-        icon: './src/assets/Cloudflare.svg',
+        icon: './Cloudflare.svg',
         description: 'Optimización y seguridad web',
       },
     ],

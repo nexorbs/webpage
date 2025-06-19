@@ -75,7 +75,7 @@ function handleSubmit() {
                   class="size-12 border-2 border-black flex items-center justify-center group-hover:bg-black transition-colors duration-300"
                 >
                   <span
-                    class="text-black group-hover:text-white font-bold text-sm transition-colors duration-300"
+                    class="text-black group-hover:text-white font-bold text-sm transition-colors duration-300 select-none"
                   >
                     {{ step.step }}
                   </span>
