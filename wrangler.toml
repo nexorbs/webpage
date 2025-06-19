@@ -22,3 +22,5 @@ directory = "./dist"
 
 [[env.development.routes]]
 pattern = "dev.nexorbs.com/*"
+custom_domain = true
+zone_name = "nexorbs.com"
