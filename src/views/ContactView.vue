@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import WhiteButton from '@/components/WhiteButton.vue'
 import { PaperAirplaneIcon } from '@heroicons/vue/24/solid'
-import { ref } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 
 const formData = ref<{
   name: string
@@ -48,6 +48,33 @@ const benefits = [
 function handleSubmit() {
   // Agregar manejo de correos
 }
+const resizeTextarea = (event: any) => {
+  const textarea = event.target
+  textarea.style.height = 'auto'
+  nextTick(() => {
+    textarea.style.height = `${textarea.scrollHeight + 1}px`
+  })
+}
+
+watch(
+  () => formData.value.message,
+  () => {
+    nextTick(() => {
+      const textarea = document.getElementById('message')
+      if (textarea) {
+        resizeTextarea({ target: textarea })
+      }
+    })
+  },
+  { immediate: true },
+)
+
+onMounted(() => {
+  const textarea = document.getElementById('message')
+  if (textarea) {
+    resizeTextarea({ target: textarea })
+  }
+})
 </script>
 <template>
   <section id="contact" class="py-24 max-md:py-16 bg-white">
@@ -110,7 +137,7 @@ function handleSubmit() {
         </div>
 
         <div class="bg-black p-8 text-white">
-          <form class="space-y-6">
+          <form class="space-y-6 flex flex-col h-full">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" class="block text-sm font-bold text-white mb-3 tracking-wide">
@@ -146,7 +173,7 @@ function handleSubmit() {
               </div>
             </div>
 
-            <div>
+            <div class="relative">
               <label
                 htmlFor="project"
                 class="block text-sm font-bold text-white mb-3 tracking-wide"
@@ -157,20 +184,23 @@ function handleSubmit() {
                 id="project"
                 name="project"
                 v-model="formData.project"
-                :class="[
-                  'w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 focus:border-white hover:border-white transition-all duration-200 focus:outline-none',
-                  formData.project.valueOf() === '' ? 'text-gray-500' : 'text-white',
-                ]"
+                class="w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 text-white focus:border-white hover:border-white transition-all duration-200 focus:outline-none"
               >
-                <option value="" hidden class="bg-black">Selecciona una opción</option>
-                <option value="web" class="bg-black">Desarrollo Web</option>
-                <option value="mobile" class="bg-black">Aplicación Móvil</option>
-                <option value="consultoria" class="bg-black">Consultoría Tech</option>
-                <option value="integral" class="bg-black">Solución Integral</option>
+                <option value="web" class="bg-black text-white">Desarrollo Web</option>
+                <option value="mobile" class="bg-black text-white">Aplicación Móvil</option>
+                <option value="consultoria" class="bg-black text-white">Consultoría Tech</option>
+                <option value="integral" class="bg-black text-white">Solución Integral</option>
               </select>
+              <input
+                v-if="!formData.project"
+                disabled
+                class="absolute placeholder-gray-500 bottom-0 left-0 mb-2.5 border-b border-transparent pointer-events-none"
+                type="text"
+                placeholder="Selecciona una opción"
+              />
             </div>
 
-            <div>
+            <div class="flex flex-col flex-grow">
               <label
                 htmlFor="message"
                 class="block text-sm font-bold text-white mb-3 tracking-wide"
@@ -181,9 +211,10 @@ function handleSubmit() {
                 id="message"
                 name="message"
                 v-model="formData.message"
+                @input="resizeTextarea"
                 required
-                rows="{4}"
-                class="w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 focus:border-white hover:border-white text-white placeholder-gray-500 transition-all duration-200 resize-none focus:outline-none"
+                rows="1"
+                class="w-full px-0 pr-1 py-3 bg-transparent border-0 border-b border-white/20 focus:border-white hover:border-white text-white placeholder-gray-500 transition-all duration-200 resize-none focus:outline-none max-h-[200px] overflow-auto"
                 placeholder="Describe tu proyecto, reto o idea..."
               />
             </div>

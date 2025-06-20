@@ -14,6 +14,19 @@ const steps = [
   { label: 'EJECUTAMOS', desc: 'Con vanguardia' },
   { label: 'LANZAMOS', desc: 'Y acompañamos' },
 ]
+
+function scrollToAboutUs() {
+  const section = document.getElementById('about')
+  const offset = 60 // cantidad de píxeles antes
+  if (section) {
+    const elementTop = section.getBoundingClientRect().top + window.pageYOffset
+
+    window.scrollTo({
+      top: elementTop - offset,
+      behavior: 'smooth',
+    })
+  }
+}
 </script>
 
 <template>
@@ -72,7 +85,7 @@ const steps = [
           />
         </WhiteButton>
 
-        <BlackButton label="Ver nuestro enfoque" />
+        <BlackButton v-on:click="scrollToAboutUs" label="Ver nuestro enfoque" />
       </div>
 
       <!-- Pasos -->

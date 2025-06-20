@@ -4,6 +4,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/solid'
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
+const activeSection = ref('')
+const isManualScroll = ref(false)
 
 const navItems = ['Inicio', 'Servicios', 'Nosotros', 'Tecnologías', 'Contacto']
 const sectionIds = ['home', 'services', 'about', 'tech', 'contact']
@@ -11,23 +13,55 @@ const sectionIds = ['home', 'services', 'about', 'tech', 'contact']
 function scrollToSection(sectionId: string) {
   isMenuOpen.value = false
   const section = document.getElementById(sectionId)
-  const offset = 60 // cantidad de píxeles antes
+  const offset = 60
+
   if (section) {
+    isManualScroll.value = true
+    activeSection.value = sectionId
+
     const elementTop = section.getBoundingClientRect().top + window.pageYOffset
 
     window.scrollTo({
       top: elementTop - offset,
       behavior: 'smooth',
     })
+
+    setTimeout(() => {
+      isManualScroll.value = false
+      handleScroll()
+    }, 800)
   }
 }
 
 function handleScroll() {
   isScrolled.value = window.scrollY > 0
+
+  if (isManualScroll.value) {
+    return
+  }
+
+  let currentActiveSection = ''
+  const viewportMid = window.innerHeight / 2
+
+  for (let i = sectionIds.length - 1; i >= 0; i--) {
+    const sectionId = sectionIds[i]
+    const section = document.getElementById(sectionId)
+    if (section) {
+      const rect = section.getBoundingClientRect()
+      if (rect.top <= viewportMid && rect.bottom >= viewportMid) {
+        currentActiveSection = sectionId
+        break
+      }
+    }
+  }
+  if (activeSection.value !== currentActiveSection) {
+    activeSection.value = currentActiveSection
+  }
 }
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  handleScroll()
 })
 
 onUnmounted(() => {
@@ -46,7 +80,7 @@ onUnmounted(() => {
       <div
         :class="[
           'flex justify-between items-center transition-all duration-300 p-4 sm:px-10 max-md:bg-black',
-          isScrolled && !isMenuOpen ? 'max-md:border-b max-md:border-white/20' : '', // Eliminado el -sm si no es una clase de tailwind
+          isScrolled && !isMenuOpen ? 'max-md:border-b max-md:border-white/20' : '',
         ]"
       >
         <div class="flex items-center space-x-3">
@@ -58,22 +92,31 @@ onUnmounted(() => {
             v-for="(item, index) in navItems"
             :key="item"
             @click="scrollToSection(sectionIds[index])"
-            class="text-gray-400 hover:text-white transition-colors duration-200 font-medium relative group cursor-pointer"
+            :class="[
+              'text-gray-400 hover:text-white transition-colors duration-200 font-medium relative group cursor-pointer',
+              { 'text-white': activeSection === sectionIds[index] },
+            ]"
           >
             {{ item }}
             <span
-              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"
+              :class="[
+                'absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full',
+                { 'w-full': activeSection === sectionIds[index] },
+              ]"
             ></span>
           </button>
         </nav>
 
-        <button name="toggle menu" class="md:hidden text-white" @click="isMenuOpen = !isMenuOpen">
+        <button
+          aria-label="toggle menu"
+          class="toggle-menu md:hidden text-white"
+          @click="isMenuOpen = !isMenuOpen"
+        >
           <Bars3Icon v-if="!isMenuOpen" class="size-6" />
           <XMarkIcon v-else class="size-6" />
         </button>
       </div>
 
-      <!-- Mobile Menu -->
       <div class="relative overflow-hidden">
         <Transition name="menu-slide">
           <div v-if="isMenuOpen" class="md:hidden bg-black border-b border-white/20 px-4">
@@ -82,7 +125,10 @@ onUnmounted(() => {
                 v-for="(item, index) in navItems"
                 :key="item"
                 @click.prevent.self="scrollToSection(sectionIds[index])"
-                class="block w-full text-left px-4 sm:px-10 py-2 text-gray-400 hover:text-white transition-colors duration-200"
+                :class="[
+                  'block w-full text-left px-4 sm:px-10 py-2 text-gray-400 hover:text-white transition-colors duration-200',
+                  { 'text-white': activeSection === sectionIds[index] },
+                ]"
               >
                 {{ item }}
               </button>
