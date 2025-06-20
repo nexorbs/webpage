@@ -41,19 +41,25 @@ function handleScroll() {
   }
 
   let currentActiveSection = ''
-  const viewportMid = window.innerHeight / 2
+  const topThreshold = 100
 
   for (let i = sectionIds.length - 1; i >= 0; i--) {
     const sectionId = sectionIds[i]
     const section = document.getElementById(sectionId)
     if (section) {
       const rect = section.getBoundingClientRect()
-      if (rect.top <= viewportMid && rect.bottom >= viewportMid) {
+
+      if (rect.top <= topThreshold && rect.bottom >= topThreshold) {
         currentActiveSection = sectionId
         break
       }
     }
   }
+
+  if (currentActiveSection === '' && window.scrollY < topThreshold && sectionIds.length > 0) {
+    currentActiveSection = sectionIds[0]
+  }
+
   if (activeSection.value !== currentActiveSection) {
     activeSection.value = currentActiveSection
   }
