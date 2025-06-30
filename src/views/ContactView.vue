@@ -77,7 +77,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <section id="contact" class="py-24 max-md:py-16 bg-white">
+  <section id="contact" style="min-height: calc(100svh - 61px)" class="py-24 max-md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20">
         <h2 class="text-5xl md:text-6xl font-black text-black mb-6 tracking-tight">CONTACTO</h2>
