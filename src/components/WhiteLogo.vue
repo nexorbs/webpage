@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
+<script setup lang="ts"></script>
+<template>
+  <svg
     version="1.1"
     id="svg1"
     width="1080"
@@ -54,7 +53,7 @@
           enable-background: accumulate;
           stop-color: #000000;
           stop-opacity: 1;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0.99999076;
         "
         id="path81"
@@ -71,7 +70,7 @@
           enable-background: accumulate;
           stop-color: #000000;
           stop-opacity: 1;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0.99999076;
         "
         id="path78"
@@ -88,7 +87,7 @@
           enable-background: accumulate;
           stop-color: #000000;
           stop-opacity: 1;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0.99999076;
         "
         id="path52"
@@ -98,7 +97,7 @@
           display: inline;
           overflow: visible;
           opacity: 1;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0;
           stroke: none;
           stroke-width: 34;
@@ -119,7 +118,7 @@
           display: inline;
           overflow: visible;
           opacity: 1;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0;
           stroke: #fa0808;
           stroke-width: 0;
@@ -140,7 +139,7 @@
           display: inline;
           overflow: visible;
           opacity: 1;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0;
           stroke: none;
           stroke-width: 34;
@@ -161,7 +160,7 @@
         style="
           fill: none;
           fill-opacity: 0.374798;
-          stroke: #0C0C0C;
+          stroke: #faf9f6;
           stroke-width: 63.9997;
           stroke-linecap: square;
           stroke-dasharray: none;
@@ -176,7 +175,7 @@
       />
       <circle
         style="
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0.98780775;
           stroke: none;
           stroke-width: 0;
@@ -194,7 +193,7 @@
       <circle
         style="
           display: inline;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0.98780775;
           stroke: none;
           stroke-width: 0;
@@ -212,7 +211,7 @@
       <circle
         style="
           display: inline;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 1;
           stroke: none;
           stroke-width: 0;
@@ -230,7 +229,7 @@
       <circle
         style="
           display: inline;
-          fill: #0C0C0C;
+          fill: #faf9f6;
           fill-opacity: 0.98780775;
           stroke: none;
           stroke-width: 0;
@@ -247,3 +246,4 @@
       />
     </g>
   </svg>
+</template>

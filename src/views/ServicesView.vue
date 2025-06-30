@@ -43,7 +43,11 @@ const services: {
 ]
 </script>
 <template>
-  <section id="services" className="py-24 max-md:py-16 bg-black">
+  <section
+    id="services"
+    style="min-height: calc(100svh - 61px)"
+    className="py-24 max-md:py-16 bg-black "
+  >
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-20">
         <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
@@ -55,7 +59,7 @@ const services: {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-fr">
         <ServiceCard v-for="(service, index) in services" :key="index" :service="service" />
       </div>
     </div>

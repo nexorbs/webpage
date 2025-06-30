@@ -7,6 +7,7 @@ import AboutUsView from './AboutUsView.vue'
 import BackgroundOfStars from '@/components/BackgroundOfStars.vue'
 import TechnologiesStack from './TechnologiesStack.vue'
 import ContactView from './ContactView.vue'
+import WhiteLogo from '@/components/WhiteLogo.vue'
 
 const steps = [
   { label: 'ESCUCHAMOS', desc: 'Tus necesidades' },
@@ -32,7 +33,8 @@ function scrollToAboutUs() {
 <template>
   <section
     id="home"
-    class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
+    style="min-height: calc(100svh - 61px)"
+    class="flex items-center justify-center relative overflow-hidden bg-black"
   >
     <BackgroundOfStars />
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
@@ -46,8 +48,7 @@ function scrollToAboutUs() {
 
       <!-- Logo + Título -->
       <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-10">
-        <img
-          src="@/assets/logo.svg"
+        <WhiteLogo
           alt="NEXORBS Logo"
           class="md:size-32 object-contain size-24 select-none"
           draggable="false"

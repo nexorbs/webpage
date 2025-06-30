@@ -65,7 +65,11 @@ const technologies = [
 ]
 </script>
 <template>
-  <section id="tech" class="py-24 max-md:py-16 bg-black border-t border-white/20">
+  <section
+    id="tech"
+    style="min-height: calc(100svh - 61px)"
+    class="py-24 max-md:py-16 bg-black border-t border-white/20"
+  >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20">
         <h2 class="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">TECNOLOGÍAS</h2>
