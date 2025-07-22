@@ -2,11 +2,7 @@
 import { ArrowRightIcon, BoltIcon } from '@heroicons/vue/24/outline'
 import BlackButton from '@/components/BlackButton.vue'
 import WhiteButton from '@/components/WhiteButton.vue'
-import ServicesView from './ServicesView.vue'
-import AboutUsView from './AboutUsView.vue'
 import BackgroundOfStars from '@/components/BackgroundOfStars.vue'
-import TechnologiesStack from './TechnologiesStack.vue'
-import ContactView from './ContactView.vue'
 import WhiteLogo from '@/components/WhiteLogo.vue'
 
 const steps = [
@@ -107,8 +103,4 @@ function scrollToAboutUs() {
       </div>
     </div>
   </section>
-  <ServicesView />
-  <AboutUsView />
-  <TechnologiesStack />
-  <ContactView />
 </template>
