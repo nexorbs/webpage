@@ -27,17 +27,17 @@ const list = [
   <section
     id="about"
     style="min-height: calc(100svh - 61px)"
-    class="py-24 max-md:py-16 flex items-center bg-white"
+    class="py-24 max-md:py-16 flex items-center bg-nexWhite"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         <div>
-          <h2 class="text-5xl md:text-6xl font-black text-black mb-8 tracking-tight">
+          <h2 class="text-5xl md:text-6xl font-black text-nexBlack mb-8 tracking-tight">
             ¿QUIÉNES
             <br />
             SOMOS?
           </h2>
-          <div class="w-24 h-1 bg-black mb-8"></div>
+          <div class="w-24 h-1 bg-nexBlack mb-8"></div>
 
           <p class="text-xl text-gray-600 mb-8 leading-relaxed font-light">
             En <strong>NexOrbs</strong> entendemos que cada proyecto es único. Nos dedicamos a
@@ -57,7 +57,7 @@ const list = [
               class="flex items-center space-x-4 group"
             >
               <div
-                class="w-2 h-2 bg-black group-hover:scale-150 transition-transform duration-300"
+                class="w-2 h-2 bg-nexBlack group-hover:scale-150 transition-transform duration-300"
               ></div>
               <span class="text-gray-700 font-medium">{{ item }}</span>
             </div>

@@ -46,14 +46,14 @@ const services: {
   <section
     id="services"
     style="min-height: calc(100svh - 61px)"
-    className="py-24 max-md:py-16 bg-black "
+    className="py-24 max-md:py-16 bg-nexBlack "
   >
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-20">
-        <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
+        <h2 className="text-5xl md:text-6xl font-black text-nexWhite mb-6 tracking-tight">
           SERVICIOS
         </h2>
-        <div className="w-24 h-1 bg-white mx-auto mb-8"></div>
+        <div className="w-24 h-1 bg-nexWhite mx-auto mb-8"></div>
         <p className="text-xl text-gray-400 max-w-3xl mx-auto font-light">
           Soluciones tecnológicas personalizadas para llevar tu proyecto al siguiente nivel
         </p>

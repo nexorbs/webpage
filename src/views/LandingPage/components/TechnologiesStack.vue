@@ -68,12 +68,14 @@ const technologies = [
   <section
     id="tech"
     style="min-height: calc(100svh - 61px)"
-    class="py-24 max-md:py-16 bg-black border-t border-white/20"
+    class="py-24 max-md:py-16 bg-nexBlack border-t border-nexWhite/20"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20">
-        <h2 class="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">TECNOLOGÍAS</h2>
-        <div class="w-24 h-1 bg-white mx-auto mb-8"></div>
+        <h2 class="text-5xl md:text-6xl font-black text-nexWhite mb-6 tracking-tight">
+          TECNOLOGÍAS
+        </h2>
+        <div class="w-24 h-1 bg-nexWhite mx-auto mb-8"></div>
         <p class="text-xl text-gray-400 max-w-3xl mx-auto font-light">
           Trabajamos con las herramientas más avanzadas para garantizar calidad y eficiencia
         </p>
@@ -89,7 +91,7 @@ const technologies = [
 
       <div class="mt-16 text-center">
         <div
-          class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3"
+          class="inline-flex items-center space-x-2 bg-nexWhite/5 backdrop-blur-sm border border-nexWhite/20 rounded-full px-6 py-3"
         >
           <span class="text-sm text-gray-300"
             >✨ Innovamos para transformar, construimos para inspirar ✨</span

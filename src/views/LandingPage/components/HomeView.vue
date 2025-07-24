@@ -30,15 +30,15 @@ function scrollToAboutUs() {
   <section
     id="home"
     style="min-height: calc(100svh - 61px)"
-    class="flex items-center justify-center relative overflow-hidden bg-black"
+    class="flex items-center justify-center relative overflow-hidden bg-nexBlack"
   >
     <BackgroundOfStars />
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
       <!-- Chip -->
       <div
-        class="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6 sm:mb-8"
+        class="inline-flex items-center space-x-2 bg-nexWhite/5 backdrop-blur-sm border border-nexWhite/20 rounded-full px-4 py-2 mb-6 sm:mb-8"
       >
-        <BoltIcon class="w-4 h-4 text-white" />
+        <BoltIcon class="w-4 h-4 text-nexWhite" />
         <span class="text-sm text-gray-300">Tech Solutions &amp; Beyond</span>
       </div>
 
@@ -51,15 +51,15 @@ function scrollToAboutUs() {
         />
         <h1 class="text-center md:text-left flex">
           <span
-            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white block"
+            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-nexWhite block"
           >
             NEX
           </span>
           <span
-            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white relative inline-block"
+            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-nexWhite relative inline-block"
           >
             ORBS
-            <div class="absolute -bottom-1 md:-bottom-2 left-0 w-full h-0.5 bg-white"></div>
+            <div class="absolute -bottom-1 md:-bottom-2 left-0 w-full h-0.5 bg-nexWhite"></div>
           </span>
         </h1>
       </div>
@@ -89,11 +89,11 @@ function scrollToAboutUs() {
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
         <div v-for="(step, index) in steps" :key="index" class="text-center group">
           <div
-            class="w-8 h-8 border border-white/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:border-white transition-colors duration-300"
+            class="w-8 h-8 border border-nexWhite/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:border-nexWhite transition-colors duration-300"
           >
-            <span class="text-white text-sm font-bold select-none">{{ index + 1 }}</span>
+            <span class="text-nexWhite text-sm font-bold select-none">{{ index + 1 }}</span>
           </div>
-          <div class="text-white font-bold text-sm tracking-widest mb-2">
+          <div class="text-nexWhite font-bold text-sm tracking-widest mb-2">
             {{ step.label }}
           </div>
           <div class="text-gray-400 text-xs">

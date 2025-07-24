@@ -80,8 +80,8 @@ onMounted(() => {
   <section id="contact" style="min-height: calc(100svh - 61px)" class="py-24 max-md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20">
-        <h2 class="text-5xl md:text-6xl font-black text-black mb-6 tracking-tight">CONTACTO</h2>
-        <div class="w-24 h-1 bg-black mx-auto mb-8"></div>
+        <h2 class="text-5xl md:text-6xl font-black text-nexBlack mb-6 tracking-tight">CONTACTO</h2>
+        <div class="w-24 h-1 bg-nexBlack mx-auto mb-8"></div>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto font-light">
           ¿Tienes un reto o idea en mente? ¡Hablemos y llevemos tu proyecto al siguiente nivel!
         </p>
@@ -89,7 +89,7 @@ onMounted(() => {
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
         <div>
-          <h3 class="text-2xl font-black text-black mb-8 tracking-wide">NUESTRO PROCESO</h3>
+          <h3 class="text-2xl font-black text-nexBlack mb-8 tracking-wide">NUESTRO PROCESO</h3>
 
           <div class="space-y-8">
             <div
@@ -99,17 +99,17 @@ onMounted(() => {
             >
               <div class="flex-shrink-0">
                 <div
-                  class="size-12 border-2 border-black flex items-center justify-center group-hover:bg-black transition-colors duration-300"
+                  class="size-12 border-2 border-nexBlack flex items-center justify-center group-hover:bg-nexBlack transition-colors duration-300"
                 >
                   <span
-                    class="text-black group-hover:text-white font-bold text-sm transition-colors duration-300 select-none"
+                    class="text-nexBlack group-hover:text-nexWhite font-bold text-sm transition-colors duration-300 select-none"
                   >
                     {{ step.step }}
                   </span>
                 </div>
               </div>
               <div class="flex-1">
-                <h4 class="text-black font-bold text-sm tracking-wide mb-2">
+                <h4 class="text-nexBlack font-bold text-sm tracking-wide mb-2">
                   {{ step.title }}
                 </h4>
                 <p class="text-gray-600 font-light text-sm leading-relaxed">
@@ -119,8 +119,8 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="mt-16 p-8 bg-black text-white">
-            <h4 class="text-white font-bold mb-6 tracking-wide">¿POR QUÉ NEXORBS?</h4>
+          <div class="mt-16 p-8 bg-nexBlack text-nexWhite">
+            <h4 class="text-nexWhite font-bold mb-6 tracking-wide">¿POR QUÉ NEXORBS?</h4>
             <ul class="space-y-6">
               <li
                 v-for="(benefit, index) in benefits"
@@ -128,7 +128,7 @@ onMounted(() => {
                 class="flex group items-center space-x-4"
               >
                 <div
-                  class="size-2 group-hover:scale-150 transition-transform duration-300 bg-white"
+                  class="size-2 group-hover:scale-150 transition-transform duration-300 bg-nexWhite"
                 ></div>
                 <span class="text-gray-300 font-light">{{ benefit }}</span>
               </li>
@@ -136,11 +136,14 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="bg-black p-8 text-white">
+        <div class="bg-nexBlack p-8 text-nexWhite">
           <form class="space-y-6 flex flex-col h-full">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" class="block text-sm font-bold text-white mb-3 tracking-wide">
+                <label
+                  htmlFor="name"
+                  class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
+                >
                   NOMBRE *
                 </label>
                 <input
@@ -149,7 +152,7 @@ onMounted(() => {
                   name="name"
                   v-model="formData.name"
                   required
-                  class="w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 focus:border-white hover:border-white text-white placeholder-gray-500 transition-all duration-200 focus:outline-none"
+                  class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 focus:outline-none"
                   placeholder="Tu nombre completo"
                 />
               </div>
@@ -157,7 +160,7 @@ onMounted(() => {
               <div>
                 <label
                   htmlFor="email"
-                  class="block text-sm font-bold text-white mb-3 tracking-wide"
+                  class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
                 >
                   EMAIL *
                 </label>
@@ -167,7 +170,7 @@ onMounted(() => {
                   name="email"
                   v-model="formData.email"
                   required
-                  class="w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 focus:border-white hover:border-white text-white placeholder-gray-500 transition-all duration-200 focus:outline-none"
+                  class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 focus:outline-none"
                   placeholder="tu@email.com"
                 />
               </div>
@@ -176,7 +179,7 @@ onMounted(() => {
             <div class="relative">
               <label
                 htmlFor="project"
-                class="block text-sm font-bold text-white mb-3 tracking-wide"
+                class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
               >
                 TIPO DE PROYECTO
               </label>
@@ -184,12 +187,16 @@ onMounted(() => {
                 id="project"
                 name="project"
                 v-model="formData.project"
-                class="w-full px-0 py-3 bg-transparent border-0 border-b border-white/20 text-white focus:border-white hover:border-white transition-all duration-200 focus:outline-none"
+                class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 text-nexWhite focus:border-nexWhite hover:border-nexWhite transition-all duration-200 focus:outline-none"
               >
-                <option value="web" class="bg-black text-white">Desarrollo Web</option>
-                <option value="mobile" class="bg-black text-white">Aplicación Móvil</option>
-                <option value="consultoria" class="bg-black text-white">Consultoría Tech</option>
-                <option value="integral" class="bg-black text-white">Solución Integral</option>
+                <option value="web" class="bg-nexBlack text-nexWhite">Desarrollo Web</option>
+                <option value="mobile" class="bg-nexBlack text-nexWhite">Aplicación Móvil</option>
+                <option value="consultoria" class="bg-nexBlack text-nexWhite">
+                  Consultoría Tech
+                </option>
+                <option value="integral" class="bg-nexBlack text-nexWhite">
+                  Solución Integral
+                </option>
               </select>
               <input
                 v-if="!formData.project"
@@ -203,7 +210,7 @@ onMounted(() => {
             <div class="flex flex-col flex-grow">
               <label
                 htmlFor="message"
-                class="block text-sm font-bold text-white mb-3 tracking-wide"
+                class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
               >
                 CUÉNTANOS TU IDEA *
               </label>
@@ -214,7 +221,7 @@ onMounted(() => {
                 @input="resizeTextarea"
                 required
                 rows="1"
-                class="w-full px-0 pr-1 py-3 bg-transparent border-0 border-b border-white/20 focus:border-white hover:border-white text-white placeholder-gray-500 transition-all duration-200 resize-none focus:outline-none max-h-[200px] overflow-auto"
+                class="w-full px-0 pr-1 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 resize-none focus:outline-none max-h-[200px] overflow-auto"
                 placeholder="Describe tu proyecto, reto o idea..."
               />
             </div>
