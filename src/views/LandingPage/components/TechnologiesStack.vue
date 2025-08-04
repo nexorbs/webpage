@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import CategorizeTechnologies from '@/components/CategorizeTechnologies.vue'
+import Chip from '@/components/Chip.vue'
+import { SparklesIcon } from '@heroicons/vue/24/solid'
 
 const technologies = [
   {
@@ -90,13 +92,12 @@ const technologies = [
       </div>
 
       <div class="mt-16 text-center">
-        <div
-          class="inline-flex items-center space-x-2 bg-nexWhite/5 backdrop-blur-sm border border-nexWhite/20 rounded-full px-6 py-3"
-        >
+        <Chip>
+          <SparklesIcon class="w-4 h-4 text-nexWhite" />
           <span class="text-sm text-gray-300"
-            >✨ Innovamos para transformar, construimos para inspirar ✨</span
-          >
-        </div>
+            >Innovamos para transformar, construimos para inspirar</span
+          ><SparklesIcon class="w-4 h-4 text-nexWhite" />
+        </Chip>
       </div>
     </div>
   </section>
