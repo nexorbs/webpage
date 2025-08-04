@@ -25,7 +25,7 @@ const icons = {
 </script>
 <template>
   <div
-    class="group bg-nexBlack border border-nexWhite/20 p-8 hover:border-nexWhite/40 transition-all duration-500 relative overflow-hidden"
+    class="group z-10 bg-nexBlack border border-nexWhite/20 p-8 hover:border-nexWhite/40 transition-all duration-500 relative overflow-hidden"
   >
     <div
       class="absolute inset-0 bg-nexWhite/5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
