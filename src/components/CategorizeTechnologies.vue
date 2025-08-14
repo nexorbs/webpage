@@ -10,9 +10,9 @@ defineProps<{
 }>()
 </script>
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 z-10">
     <h3
-      class="text-white font-bold text-lg tracking-wide text-center border-b border-white/20 pb-4"
+      class="text-nexWhite font-bold text-lg tracking-wide text-center border-b border-nexWhite/20 pb-4"
     >
       {{ category.category.toUpperCase() }}
     </h3>

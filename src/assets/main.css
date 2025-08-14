@@ -1,12 +1,17 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-nexBlack: #0C0C0C;
-  --color-nexWhite: #FAF9F6;
+  --color-nexBlack: #0c0c0c;
+  --color-nexWhite: #faf9f6;
   --color-nexSoftGray: #9ca3af;
 }
 
-h1, h2{
-  font-family: 'Cantarell', 'Helvetica Neue',
-    sans-serif;
+h1,
+h2 {
+  font-family: 'Cantarell', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  background-color: var(--color-nexBlack);
+  overscroll-behavior: none;
 }

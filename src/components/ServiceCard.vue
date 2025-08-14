@@ -25,20 +25,20 @@ const icons = {
 </script>
 <template>
   <div
-    class="group bg-black border border-white/20 p-8 hover:border-white/40 transition-all duration-500 relative overflow-hidden"
+    class="group z-10 bg-nexBlack border border-nexWhite/20 p-8 hover:border-nexWhite/40 transition-all duration-500 relative overflow-hidden"
   >
     <div
-      class="absolute inset-0 bg-white/5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+      class="absolute inset-0 bg-nexWhite/5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
     ></div>
 
     <div class="relative z-10">
       <div class="flex items-center justify-between mb-6">
         <div
-          class="size-12 border border-white/20 flex items-center justify-center group-hover:border-white group-hover:bg-white transition-all duration-300"
+          class="size-12 border border-nexWhite/20 flex items-center justify-center group-hover:border-nexWhite group-hover:bg-nexWhite transition-all duration-300"
         >
           <component
             :is="icons[service.icon]"
-            class="size-6 text-white group-hover:text-black transition-colors duration-300"
+            class="size-6 text-nexWhite group-hover:text-nexBlack transition-colors duration-300"
           />
         </div>
         <span class="text-xs text-gray-400 font-medium tracking-widest">
@@ -46,7 +46,7 @@ const icons = {
         </span>
       </div>
 
-      <h3 class="text-xl font-bold text-white mb-4 tracking-wide">
+      <h3 class="text-xl font-bold text-nexWhite mb-4 tracking-wide">
         {{ service.title.toUpperCase() }}
       </h3>
 
@@ -58,7 +58,7 @@ const icons = {
           :key="index"
           class="flex items-center space-x-3"
         >
-          <div class="w-1 h-1 bg-white"></div>
+          <div class="w-1 h-1 bg-nexWhite"></div>
           <span class="text-sm text-gray-300 font-medium">{{ feature }}</span>
         </li>
       </ul>

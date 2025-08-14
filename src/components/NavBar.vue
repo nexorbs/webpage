@@ -6,6 +6,7 @@ const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 const activeSection = ref('')
 const isManualScroll = ref(false)
+const hasScrolled = ref(false)
 
 const navItems = ['Inicio', 'Servicios', 'Nosotros', 'Tecnologías', 'Contacto']
 const sectionIds = ['home', 'services', 'about', 'tech', 'contact']
@@ -35,7 +36,7 @@ function scrollToSection(sectionId: string) {
 
 function handleScroll() {
   isScrolled.value = window.scrollY > 0
-
+  hasScrolled.value = hasScrolled.value ? true : isScrolled.value
   if (isManualScroll.value) {
     return
   }
@@ -78,19 +79,20 @@ onUnmounted(() => {
 <template>
   <header
     :class="[
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 md:bg-black',
-      isScrolled ? 'md:border-b md:border-white/20' : '',
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-500 md:bg-nexBlack',
+      isScrolled ? 'md:border-b md:border-nexWhite/20 ' : '',
+      hasScrolled ? 'translate-y-0' : '-translate-y-full',
     ]"
   >
     <div class="max-w-7xl mx-auto">
       <div
         :class="[
-          'flex justify-between items-center transition-all duration-300 p-4 sm:px-10 max-md:bg-black',
-          isScrolled && !isMenuOpen ? 'max-md:border-b max-md:border-white/20' : '',
+          'flex justify-between items-center transition-all duration-300 p-4 sm:px-10 max-md:bg-nexBlack',
+          isScrolled && !isMenuOpen ? 'max-md:border-b max-md:border-nexWhite/20' : '',
         ]"
       >
         <div class="flex items-center space-x-3">
-          <span class="text-white font-black text-xl tracking-tight">NexOrbs</span>
+          <span class="text-nexWhite font-black text-xl tracking-tight">NexOrbs</span>
         </div>
 
         <nav class="hidden md:flex items-center space-x-8">
@@ -99,14 +101,14 @@ onUnmounted(() => {
             :key="item"
             @click="scrollToSection(sectionIds[index])"
             :class="[
-              'text-gray-400 hover:text-white transition-colors duration-200 font-medium relative group cursor-pointer',
-              { 'text-white': activeSection === sectionIds[index] },
+              'text-gray-400 hover:text-nexWhite transition-colors duration-200 font-medium relative group cursor-pointer',
+              { 'text-nexWhite': activeSection === sectionIds[index] },
             ]"
           >
             {{ item }}
             <span
               :class="[
-                'absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full',
+                'absolute -bottom-1 left-0 w-0 h-0.5 bg-nexWhite transition-all duration-300 group-hover:w-full',
                 { 'w-full': activeSection === sectionIds[index] },
               ]"
             ></span>
@@ -115,7 +117,7 @@ onUnmounted(() => {
 
         <button
           aria-label="toggle menu"
-          class="toggle-menu md:hidden text-white"
+          class="toggle-menu md:hidden text-nexWhite"
           @click="isMenuOpen = !isMenuOpen"
         >
           <Bars3Icon v-if="!isMenuOpen" class="size-6" />
@@ -125,15 +127,15 @@ onUnmounted(() => {
 
       <div class="relative overflow-hidden">
         <Transition name="menu-slide">
-          <div v-if="isMenuOpen" class="md:hidden bg-black border-b border-white/20 px-4">
-            <nav class="py-4 border-t border-white/20 space-y-2">
+          <div v-if="isMenuOpen" class="md:hidden bg-nexBlack border-b border-nexWhite/20 px-4">
+            <nav class="py-4 border-t border-nexWhite/20 space-y-2">
               <button
                 v-for="(item, index) in navItems"
                 :key="item"
                 @click.prevent.self="scrollToSection(sectionIds[index])"
                 :class="[
-                  'block w-full text-left px-4 sm:px-10 py-2 text-gray-400 hover:text-white transition-colors duration-200',
-                  { 'text-white': activeSection === sectionIds[index] },
+                  'block w-full text-left px-4 sm:px-10 py-2 text-gray-400 hover:text-nexWhite transition-colors duration-200',
+                  { 'text-nexWhite': activeSection === sectionIds[index] },
                 ]"
               >
                 {{ item }}
