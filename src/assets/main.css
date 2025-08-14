@@ -13,4 +13,5 @@ h2 {
 
 body {
   background-color: var(--color-nexBlack);
+  overscroll-behavior: none;
 }

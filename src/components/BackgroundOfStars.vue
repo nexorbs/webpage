@@ -1,7 +1,7 @@
 <template>
   <div class="sky">
     <div class="stars">
-      <span v-for="n in 100" :key="'star-' + n" class="star" :style="getStarStyle()" />
+      <span v-for="n in 200" :key="'star-' + n" class="star" :style="getStarStyle()" />
     </div>
   </div>
 </template>
@@ -27,11 +27,9 @@ const getStarStyle = () => {
 
 <style scoped>
 .sky {
-  position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: 0;
 }
 
 .star {

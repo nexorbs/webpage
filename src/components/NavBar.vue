@@ -6,6 +6,7 @@ const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 const activeSection = ref('')
 const isManualScroll = ref(false)
+const hasScrolled = ref(false)
 
 const navItems = ['Inicio', 'Servicios', 'Nosotros', 'Tecnologías', 'Contacto']
 const sectionIds = ['home', 'services', 'about', 'tech', 'contact']
@@ -35,7 +36,7 @@ function scrollToSection(sectionId: string) {
 
 function handleScroll() {
   isScrolled.value = window.scrollY > 0
-
+  hasScrolled.value = hasScrolled.value ? true : isScrolled.value
   if (isManualScroll.value) {
     return
   }
@@ -78,8 +79,9 @@ onUnmounted(() => {
 <template>
   <header
     :class="[
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-300 md:bg-nexBlack',
-      isScrolled ? 'md:border-b md:border-nexWhite/20' : '',
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-500 md:bg-nexBlack',
+      isScrolled ? 'md:border-b md:border-nexWhite/20 ' : '',
+      hasScrolled ? 'translate-y-0' : '-translate-y-full',
     ]"
   >
     <div class="max-w-7xl mx-auto">
