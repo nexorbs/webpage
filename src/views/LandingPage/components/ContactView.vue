@@ -95,10 +95,8 @@ const handleSubmit = async (event: Event) => {
     const result = await response.json()
 
     if (response.ok && result.success) {
-      // Success toast
       await showSuccessToast('¡Mensaje enviado correctamente! Te contactaremos pronto.')
 
-      // Reset form
       formData.value = {
         name: '',
         email: '',
@@ -106,7 +104,6 @@ const handleSubmit = async (event: Event) => {
         message: '',
       }
 
-      // Reset textarea height
       nextTick(() => {
         const textarea = document.getElementById('message')
         if (textarea) {
@@ -114,12 +111,10 @@ const handleSubmit = async (event: Event) => {
         }
       })
     } else {
-      // Error toast
       await showErrorToast(result.error || 'Error al enviar el mensaje. Inténtalo de nuevo.')
     }
   } catch (error) {
     console.error('Error:', error)
-    // Connection error toast
     await showErrorToast('Error de conexión. Verifica tu conexión a internet e inténtalo de nuevo.')
   } finally {
     isSubmitting.value = false
@@ -225,11 +220,8 @@ const handleSubmit = async (event: Event) => {
                 placeholder="Describe tu proyecto, reto o idea..." />
             </div>
 
-            <WhiteButton
-              type="submit"
-              class="w-full justify-center"
-              :label="isSubmitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'"
-              :disabled="isSubmitting">
+            <WhiteButton type="submit" class="w-full justify-center"
+              :label="isSubmitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'" :disabled="isSubmitting">
               <PaperAirplaneIcon class="size-5" :class="{ 'animate-pulse': isSubmitting }" />
             </WhiteButton>
           </form>

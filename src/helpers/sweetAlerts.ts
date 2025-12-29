@@ -51,25 +51,30 @@ const smallToast = Swal.mixin({
   timer: 3000,
   timerProgressBar: true,
 })
-
 export async function showWarningToast(message: string) {
   await smallToast.fire({
     icon: 'warning',
     title: message,
   })
 }
-
 export async function showErrorToast(message: string) {
   await smallToast.fire({
     icon: 'error',
     iconColor: 'red',
+    background: '#E35461',
+    position: 'top-end',
+    color: 'white',
+    showCloseButton: true,
     title: message,
   })
 }
-
 export async function showSuccessToast(message: string) {
   await smallToast.fire({
     icon: 'success',
+    background: '#70D483',
+    color: 'white',
+    showCloseButton: true,
+    position: 'top-end',
     iconColor: 'green',
     title: message,
   })

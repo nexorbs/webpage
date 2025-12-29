@@ -1,9 +1,7 @@
-// Cloudflare Workers environment variables
 interface Env {
   BREVO_API_KEY: string
 }
 
-// Contact form data interface
 interface ContactFormData {
   name: string
   email: string
@@ -11,7 +9,6 @@ interface ContactFormData {
   message: string
 }
 
-// Cloudflare Pages Functions context
 interface PagesContext {
   request: Request
   env: Env

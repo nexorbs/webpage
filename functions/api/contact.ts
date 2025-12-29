@@ -14,20 +14,17 @@ interface Env {
 export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context
 
-  // CORS headers
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   }
 
-  // Handle preflight OPTIONS request
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers: corsHeaders })
   }
 
   try {
-    // Parse form data
     const formData = await request.formData()
     const data: ContactFormData = {
       name: formData.get('name') as string,
@@ -36,7 +33,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       message: formData.get('message') as string,
     }
 
-    // Validate required fields
     if (!data.name || !data.email || !data.message) {
       return new Response(JSON.stringify({ error: 'Faltan campos obligatorios' }), {
         status: 400,
@@ -44,11 +40,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       })
     }
 
-    // Initialize Brevo API
     const emailAPI = new TransactionalEmailsApi()
     ;(emailAPI as any).authentications.apiKey.apiKey = env.BREVO_API_KEY
 
-    // Project type mapping
     const projectTypes = {
       web: 'Desarrollo Web',
       mobile: 'Aplicación Móvil',
@@ -56,7 +50,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       integral: 'Solución Integral',
     }
 
-    // Build email message
     const message = new SendSmtpEmail()
     message.subject = `Nuevo contacto de ${data.name} - ${projectTypes[data.project as keyof typeof projectTypes] || 'Sin especificar'}`
     message.htmlContent = `
@@ -133,13 +126,11 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Mexico_City' })
       },
     ]
 
-    // Set reply-to to the user's email
     message.replyTo = {
       email: data.email,
       name: data.name,
     }
 
-    // Send the email
     await emailAPI.sendTransacEmail(message)
 
     return new Response(
