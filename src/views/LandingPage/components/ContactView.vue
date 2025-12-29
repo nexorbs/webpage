@@ -2,6 +2,7 @@
 import WhiteButton from '@/components/WhiteButton.vue'
 import { PaperAirplaneIcon } from '@heroicons/vue/24/solid'
 import { nextTick, onMounted, ref, watch } from 'vue'
+import { showSuccessToast, showErrorToast } from '@/helpers/sweetAlerts'
 
 const formData = ref<{
   name: string
@@ -14,6 +15,8 @@ const formData = ref<{
   project: '',
   message: '',
 })
+
+const isSubmitting = ref(false)
 
 const steps = [
   {
@@ -45,9 +48,6 @@ const benefits = [
   'Acompañamiento post-implementación',
 ]
 
-function handleSubmit() {
-  // Agregar manejo de correos
-}
 const resizeTextarea = (event: any) => {
   const textarea = event.target
   textarea.style.height = 'auto'
@@ -75,6 +75,56 @@ onMounted(() => {
     resizeTextarea({ target: textarea })
   }
 })
+
+const handleSubmit = async (event: Event) => {
+  event.preventDefault()
+
+  if (isSubmitting.value) return
+
+  isSubmitting.value = true
+
+  try {
+    const form = event.target as HTMLFormElement
+    const formDataToSend = new FormData(form)
+
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      body: formDataToSend,
+    })
+
+    const result = await response.json()
+
+    if (response.ok && result.success) {
+      // Success toast
+      await showSuccessToast('¡Mensaje enviado correctamente! Te contactaremos pronto.')
+
+      // Reset form
+      formData.value = {
+        name: '',
+        email: '',
+        project: '',
+        message: '',
+      }
+
+      // Reset textarea height
+      nextTick(() => {
+        const textarea = document.getElementById('message')
+        if (textarea) {
+          textarea.style.height = 'auto'
+        }
+      })
+    } else {
+      // Error toast
+      await showErrorToast(result.error || 'Error al enviar el mensaje. Inténtalo de nuevo.')
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    // Connection error toast
+    await showErrorToast('Error de conexión. Verifica tu conexión a internet e inténtalo de nuevo.')
+  } finally {
+    isSubmitting.value = false
+  }
+}
 </script>
 <template>
   <section id="contact" style="min-height: calc(100svh - 61px)" class="py-24 max-md:py-16 bg-white">
@@ -92,18 +142,12 @@ onMounted(() => {
           <h3 class="text-2xl font-black text-nexBlack mb-8 tracking-wide">NUESTRO PROCESO</h3>
 
           <div class="space-y-8">
-            <div
-              v-for="(step, index) in steps"
-              :key="index"
-              class="flex items-start space-x-6 group"
-            >
+            <div v-for="(step, index) in steps" :key="index" class="flex items-start space-x-6 group">
               <div class="flex-shrink-0">
                 <div
-                  class="size-12 border-2 border-nexBlack flex items-center justify-center group-hover:bg-nexBlack transition-colors duration-300"
-                >
+                  class="size-12 border-2 border-nexBlack flex items-center justify-center group-hover:bg-nexBlack transition-colors duration-300">
                   <span
-                    class="text-nexBlack group-hover:text-nexWhite font-bold text-sm transition-colors duration-300 select-none"
-                  >
+                    class="text-nexBlack group-hover:text-nexWhite font-bold text-sm transition-colors duration-300 select-none">
                     {{ step.step }}
                   </span>
                 </div>
@@ -122,14 +166,8 @@ onMounted(() => {
           <div class="mt-16 p-8 bg-nexBlack text-nexWhite">
             <h4 class="text-nexWhite font-bold mb-6 tracking-wide">¿POR QUÉ NEXORBS?</h4>
             <ul class="space-y-6">
-              <li
-                v-for="(benefit, index) in benefits"
-                :key="index"
-                class="flex group items-center space-x-4"
-              >
-                <div
-                  class="size-2 group-hover:scale-150 transition-transform duration-300 bg-nexWhite"
-                ></div>
+              <li v-for="(benefit, index) in benefits" :key="index" class="flex group items-center space-x-4">
+                <div class="size-2 group-hover:scale-150 transition-transform duration-300 bg-nexWhite"></div>
                 <span class="text-gray-300 font-light">{{ benefit }}</span>
               </li>
             </ul>
@@ -137,58 +175,33 @@ onMounted(() => {
         </div>
 
         <div class="bg-nexBlack p-8 text-nexWhite">
-          <form class="space-y-6 flex flex-col h-full">
+          <form @submit="handleSubmit" class="space-y-6 flex flex-col h-full">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label
-                  htmlFor="name"
-                  class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
-                >
+                <label htmlFor="name" class="block text-sm font-bold text-nexWhite mb-3 tracking-wide">
                   NOMBRE *
                 </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  v-model="formData.name"
-                  required
+                <input type="text" id="name" name="name" v-model="formData.name" required
                   class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 focus:outline-none"
-                  placeholder="Tu nombre completo"
-                />
+                  placeholder="Tu nombre completo" />
               </div>
 
               <div>
-                <label
-                  htmlFor="email"
-                  class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
-                >
+                <label htmlFor="email" class="block text-sm font-bold text-nexWhite mb-3 tracking-wide">
                   EMAIL *
                 </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  v-model="formData.email"
-                  required
+                <input type="email" id="email" name="email" v-model="formData.email" required
                   class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 focus:outline-none"
-                  placeholder="tu@email.com"
-                />
+                  placeholder="tu@email.com" />
               </div>
             </div>
 
             <div class="relative">
-              <label
-                htmlFor="project"
-                class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
-              >
+              <label htmlFor="project" class="block text-sm font-bold text-nexWhite mb-3 tracking-wide">
                 TIPO DE PROYECTO
               </label>
-              <select
-                id="project"
-                name="project"
-                v-model="formData.project"
-                class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 text-nexWhite focus:border-nexWhite hover:border-nexWhite transition-all duration-200 focus:outline-none"
-              >
+              <select id="project" name="project" v-model="formData.project"
+                class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 text-nexWhite focus:border-nexWhite hover:border-nexWhite transition-all duration-200 focus:outline-none">
                 <option value="web" class="bg-nexBlack text-nexWhite">Desarrollo Web</option>
                 <option value="mobile" class="bg-nexBlack text-nexWhite">Aplicación Móvil</option>
                 <option value="consultoria" class="bg-nexBlack text-nexWhite">
@@ -198,39 +211,27 @@ onMounted(() => {
                   Solución Integral
                 </option>
               </select>
-              <input
-                v-if="!formData.project"
-                disabled
+              <input v-if="!formData.project" disabled
                 class="absolute placeholder-gray-500 bottom-0 left-0 mb-2.5 border-b border-transparent pointer-events-none"
-                type="text"
-                placeholder="Selecciona una opción"
-              />
+                type="text" placeholder="Selecciona una opción" />
             </div>
 
             <div class="flex flex-col flex-grow">
-              <label
-                htmlFor="message"
-                class="block text-sm font-bold text-nexWhite mb-3 tracking-wide"
-              >
+              <label htmlFor="message" class="block text-sm font-bold text-nexWhite mb-3 tracking-wide">
                 CUÉNTANOS TU IDEA *
               </label>
-              <textarea
-                id="message"
-                name="message"
-                v-model="formData.message"
-                @input="resizeTextarea"
-                required
-                rows="1"
+              <textarea id="message" name="message" v-model="formData.message" @input="resizeTextarea" required rows="1"
                 class="w-full px-0 pr-1 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 resize-none focus:outline-none max-h-[200px] overflow-auto"
-                placeholder="Describe tu proyecto, reto o idea..."
-              />
+                placeholder="Describe tu proyecto, reto o idea..." />
             </div>
+
             <WhiteButton
-              v-on:click.prevent="handleSubmit"
+              type="submit"
               class="w-full justify-center"
-              label="ENVIAR MENSAJE"
-              ><PaperAirplaneIcon class="size-5"
-            /></WhiteButton>
+              :label="isSubmitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'"
+              :disabled="isSubmitting">
+              <PaperAirplaneIcon class="size-5" :class="{ 'animate-pulse': isSubmitting }" />
+            </WhiteButton>
           </form>
         </div>
       </div>

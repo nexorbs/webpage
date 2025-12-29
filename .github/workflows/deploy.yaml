@@ -14,6 +14,7 @@ on:
       - 'tsconfig.json'
       - 'public/**'
       - 'src/**'
+      - 'functions/**'
 
 jobs:
   deploy:
@@ -36,8 +37,11 @@ jobs:
       - name: Build
         run: npm run build-only
 
-      - name: Deploy
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name nexorbs-webpage
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}

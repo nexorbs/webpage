@@ -15,3 +15,31 @@ body {
   background-color: var(--color-nexBlack);
   overscroll-behavior: none;
 }
+
+/* SweetAlert2 custom styles */
+.swal-toast-success {
+  background-color: var(--color-nexBlack) !important;
+  color: var(--color-nexWhite) !important;
+  border: 2px solid #10b981 !important;
+}
+
+.swal-toast-error {
+  background-color: var(--color-nexBlack) !important;
+  color: var(--color-nexWhite) !important;
+  border: 2px solid #ef4444 !important;
+}
+
+.swal2-toast .swal2-title {
+  color: var(--color-nexWhite) !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+}
+
+.swal2-toast .swal2-content {
+  color: var(--color-nexSoftGray) !important;
+  font-size: 14px !important;
+}
+
+.swal2-toast .swal2-timer-progress-bar {
+  background-color: var(--color-nexWhite) !important;
+}

@@ -1,12 +1,7 @@
 name = "nexorbs-webpage"
-compatibility_date = "2025-06-10"
-compatibility_flags = [
-  "nodejs_compat",
-  "no_nodejs_compat_v2"
-]
-
-[assets]
-directory = "./dist"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
 
 [placement]
 mode = "smart"
@@ -14,13 +9,5 @@ mode = "smart"
 [observability]
 enabled = true
 
-[env.development]
-name = "nexorbs-webpage-dev"
-
-[env.development.assets]
-directory = "./dist"
-
-[[env.development.routes]]
-pattern = "dev.nexorbs.com/*"
-custom_domain = true
-zone_name = "nexorbs.com"
+# Environment variables (set these in Cloudflare Dashboard or use wrangler secret)
+# BREVO_API_KEY = "your-brevo-api-key-here"
