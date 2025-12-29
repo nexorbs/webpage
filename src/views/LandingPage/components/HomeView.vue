@@ -30,6 +30,18 @@ function scrollToAboutUs() {
   }
 }
 
+function scrollToContact() {
+  const section = document.getElementById('contact')
+  const offset = 60 // cantidad de píxeles antes
+  if (section) {
+    const elementTop = section.getBoundingClientRect().top + window.pageYOffset
+    window.scrollTo({
+      top: elementTop - offset,
+      behavior: 'smooth',
+    })
+  }
+}
+
 gsap.registerPlugin(SplitText, ScrollTrigger)
 const titleRef = ref<null | HTMLElement>(null)
 
@@ -43,7 +55,7 @@ onMounted(async () => {
   let targets = splitter.chars
 
   targets.forEach((t) => {
-    ;(t as HTMLElement).style.willChange = 'transform, opacity'
+    ; (t as HTMLElement).style.willChange = 'transform, opacity'
   })
 
   const tl = gsap.timeline({
@@ -126,14 +138,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section
-    id="home"
-    class="flex justify-center relative overflow-hidden min-h-svh h-min bg-nexBlack"
-  >
-    <div
-      id="content"
-      class="max-w-7xl min-h-screen h-min flex items-center justify-center flex-col mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16"
-    >
+  <section id="home" class="flex justify-center relative overflow-hidden min-h-svh h-min bg-nexBlack">
+    <div id="content"
+      class="max-w-7xl min-h-screen h-min flex items-center justify-center flex-col mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
       <!-- Chip -->
       <Chip class="mb-8 sm:mb-10">
         <BoltIcon class="w-4 h-4 text-nexWhite" />
@@ -141,49 +148,30 @@ onMounted(async () => {
       </Chip>
 
       <!-- Logo + Título -->
-      <div
-        id="nexorbs"
-        class="z-50 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-10"
-      >
-        <AnimatedLogo
-          alt="NEXORBS Logo"
-          class="md:size-40 object-contain size-24 select-none"
-          draggable="false"
-          :speed="0.5"
-          :color="'white'"
-        />
-        <h1
-          ref="titleRef"
-          class="text-center md:text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold text-nexWhite block"
-        >
+      <div id="nexorbs" class="z-50 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-10">
+        <AnimatedLogo alt="NEXORBS Logo" class="md:size-40 object-contain size-24 select-none" draggable="false"
+          :speed="0.5" :color="'white'" />
+        <h1 ref="titleRef"
+          class="text-center md:text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold text-nexWhite block">
           <!-- NEXORBS -->
           <span class="font-extrabold text-nexWhite inline-block"> NEX </span>
           <span id="orbs" class="font-extrabold text-nexWhite relative inline-block">
             ORBS
-            <div
-              id="underline"
-              class="absolute rounded-full -bottom-1 left-0 w-full h-0.5 bg-nexWhite"
-            ></div>
+            <div id="underline" class="absolute rounded-full -bottom-1 left-0 w-full h-0.5 bg-nexWhite"></div>
           </span>
         </h1>
       </div>
       <div id="bottomContent">
         <!-- Descripción -->
-        <p
-          class="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed font-light"
-        >
+        <p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed font-light">
           Tu aliado en soluciones tecnológicas. Llevamos tu idea o negocio al siguiente nivel con
           desarrollo web, apps móviles y consultoría especializada.
         </p>
 
         <!-- Botones -->
-        <div
-          class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-20"
-        >
-          <WhiteButton label="Comenzar Proyecto" @click="$emit('start-project')">
-            <ArrowRightIcon
-              class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200 relative z-10"
-            />
+        <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-20">
+          <WhiteButton label="Comenzar Proyecto" @click="scrollToContact">
+            <ArrowRightIcon class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200 relative z-10" />
           </WhiteButton>
 
           <BlackButton v-on:click="scrollToAboutUs" label="Ver nuestro enfoque" />
@@ -192,10 +180,8 @@ onMounted(async () => {
         <!-- Pasos -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
           <div v-for="(step, index) in steps" :key="index" class="text-center group">
-            <div
-              id="step"
-              class="w-8 h-8 border border-nexWhite/20 bg-nexBlack rounded-full flex items-center justify-center mx-auto mb-4 group-hover:border-nexWhite transition-colors duration-300"
-            >
+            <div id="step"
+              class="w-8 h-8 border border-nexWhite/20 bg-nexBlack rounded-full flex items-center justify-center mx-auto mb-4 group-hover:border-nexWhite transition-colors duration-300">
               <span class="text-nexWhite text-sm font-bold select-none">{{ index + 1 }}</span>
             </div>
             <div class="step-details">
