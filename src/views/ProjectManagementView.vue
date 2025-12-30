@@ -1,250 +1,3 @@
-<template>
-  <div class="project-management">
-    <!-- Header -->
-    <div class="header">
-      <div class="header-content">
-        <div class="title-section">
-          <h1>Gestión de Proyectos</h1>
-          <p>Administra y supervisa todos los proyectos activos</p>
-        </div>
-        <div class="actions" v-if="canCreateProjects">
-          <WhiteButton @click="openCreateModal" icon="plus">
-            Nuevo Proyecto
-          </WhiteButton>
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="filters">
-      <div class="filter-group">
-        <label>Estado:</label>
-        <select v-model="filters.status" @change="loadProjects">
-          <option value="">Todos los estados</option>
-          <option v-for="status in projectStatuses" :key="status.value" :value="status.value">
-            {{ status.label }}
-          </option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>Tipo:</label>
-        <select v-model="filters.type" @change="loadProjects">
-          <option value="">Todos los tipos</option>
-          <option v-for="type in projectTypes" :key="type.value" :value="type.value">
-            {{ type.label }}
-          </option>
-        </select>
-      </div>
-
-      <div class="filter-group" v-if="userRole === 'admin'">
-        <label>Cliente:</label>
-        <select v-model="filters.client_id" @change="loadProjects">
-          <option value="">Todos los clientes</option>
-          <option v-for="client in clients" :key="client.id" :value="client.id">
-            {{ client.display_name }} {{ client.company_name ? `(${client.company_name})` : '' }}
-          </option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>Por página:</label>
-        <select v-model.number="filters.limit" @change="loadProjects">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Projects Table -->
-    <div class="table-container" v-if="!loading">
-      <table class="projects-table">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Proyecto</th>
-            <th>Cliente</th>
-            <th>Tipo</th>
-            <th>Estado</th>
-            <th>Presupuesto</th>
-            <th>Duración</th>
-            <th>Fecha Límite</th>
-            <th v-if="canEditProjects">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="project in projects" :key="project.id" class="project-row">
-            <td>
-              <span class="project-code">{{ project.project_code }}</span>
-            </td>
-            <td>
-              <div class="project-info">
-                <strong>{{ project.name }}</strong>
-                <p v-if="project.description">{{ project.description }}</p>
-              </div>
-            </td>
-            <td>
-              <div class="client-info">
-                <strong>{{ project.client_name }}</strong>
-                <p v-if="project.company_name">{{ project.company_name }}</p>
-                <small>{{ project.client_email }}</small>
-              </div>
-            </td>
-            <td>
-              <Chip :color="getTypeInfo(project.type).color" :text="project.type" />
-            </td>
-            <td>
-              <Chip :color="getStatusInfo(project.status).color" :text="getStatusInfo(project.status).label" />
-            </td>
-            <td>{{ formatBudget(project.estimated_budget) }}</td>
-            <td>{{ formatDuration(project.estimated_duration) }}</td>
-            <td>{{ formatDate(project.deadline) }}</td>
-            <td v-if="canEditProjects">
-              <div class="actions">
-                <button @click="openEditModal(project)" class="edit-btn" title="Editar">
-                  <i class="icon-edit"></i>
-                </button>
-                <button @click="confirmDelete(project)" class="delete-btn" title="Eliminar">
-                  <i class="icon-delete"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Empty state -->
-      <div v-if="projects.length === 0" class="empty-state">
-        <div class="empty-content">
-          <i class="icon-projects"></i>
-          <h3>No hay proyectos</h3>
-          <p v-if="userRole === 'admin'">Comienza creando tu primer proyecto</p>
-          <p v-else>Aún no tienes proyectos asignados</p>
-          <WhiteButton v-if="canCreateProjects" @click="openCreateModal" icon="plus">
-            Crear Primer Proyecto
-          </WhiteButton>
-        </div>
-      </div>
-    </div>
-
-    <!-- Loading state -->
-    <div v-if="loading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Cargando proyectos...</p>
-    </div>
-
-    <!-- Pagination -->
-    <div class="pagination" v-if="pagination.totalPages > 1">
-      <button @click="changePage(pagination.page - 1)" :disabled="pagination.page === 1" class="page-btn">
-        Anterior
-      </button>
-
-      <span class="page-info">
-        Página {{ pagination.page }} de {{ pagination.totalPages }}
-        ({{ pagination.total }} proyectos)
-      </span>
-
-      <button @click="changePage(pagination.page + 1)" :disabled="pagination.page === pagination.totalPages"
-        class="page-btn">
-        Siguiente
-      </button>
-    </div>
-
-    <!-- Create/Edit Modal -->
-    <div v-if="showModal" class="modal-overlay" @click="closeModal">
-      <div class="modal" @click.stop>
-        <div class="modal-header">
-          <h3>{{ editingProject ? 'Editar Proyecto' : 'Crear Nuevo Proyecto' }}</h3>
-          <button @click="closeModal" class="close-btn">&times;</button>
-        </div>
-
-        <form @submit.prevent="saveProject" class="modal-content">
-          <div class="form-group">
-            <label for="projectName">Nombre del Proyecto*</label>
-            <input id="projectName" v-model="formData.name" type="text" required
-              placeholder="Ingrese el nombre del proyecto" />
-          </div>
-
-          <div class="form-group">
-            <label for="projectDescription">Descripción</label>
-            <textarea id="projectDescription" v-model="formData.description" rows="3"
-              placeholder="Describe brevemente el proyecto"></textarea>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="projectType">Tipo de Proyecto*</label>
-              <select id="projectType" v-model="formData.type" required>
-                <option value="">Seleccionar tipo</option>
-                <option v-for="type in projectTypes" :key="type.value" :value="type.value">
-                  {{ type.label }}
-                </option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="projectClient">Cliente*</label>
-              <select id="projectClient" v-model="formData.client_id" required>
-                <option value="">Seleccionar cliente</option>
-                <option v-for="client in clients" :key="client.id" :value="client.id">
-                  {{ client.display_name }} {{ client.company_name ? `(${client.company_name})` : '' }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row" v-if="editingProject">
-            <div class="form-group">
-              <label for="projectStatus">Estado</label>
-              <select id="projectStatus" v-model="formData.status">
-                <option v-for="status in projectStatuses" :key="status.value" :value="status.value">
-                  {{ status.label }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="projectBudget">Presupuesto Estimado (MXN)</label>
-              <input id="projectBudget" v-model.number="formData.estimated_budget" type="number" min="0" step="1000"
-                placeholder="0" />
-            </div>
-
-            <div class="form-group">
-              <label for="projectDuration">Duración Estimada (días)</label>
-              <input id="projectDuration" v-model.number="formData.estimated_duration" type="number" min="1"
-                placeholder="30" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="startDate">Fecha de Inicio</label>
-              <input id="startDate" v-model="formData.start_date" type="date" />
-            </div>
-
-            <div class="form-group">
-              <label for="deadline">Fecha Límite</label>
-              <input id="deadline" v-model="formData.deadline" type="date" />
-            </div>
-          </div>
-
-          <div class="modal-actions">
-            <button type="button" @click="closeModal" class="cancel-btn">
-              Cancelar
-            </button>
-            <button type="submit" class="save-btn" :disabled="saving">
-              {{ saving ? 'Guardando...' : (editingProject ? 'Actualizar' : 'Crear') }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue';
 import { authManager } from '@/helpers/authManager';
@@ -516,6 +269,253 @@ onMounted(() => {
   loadClients();
 });
 </script>
+
+<template>
+  <div class="project-management">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="title-section">
+          <h1>Gestión de Proyectos</h1>
+          <p>Administra y supervisa todos los proyectos activos</p>
+        </div>
+        <div class="actions" v-if="canCreateProjects">
+          <WhiteButton @click="openCreateModal" icon="plus">
+            Nuevo Proyecto
+          </WhiteButton>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <div class="filter-group">
+        <label>Estado:</label>
+        <select v-model="filters.status" @change="loadProjects">
+          <option value="">Todos los estados</option>
+          <option v-for="status in projectStatuses" :key="status.value" :value="status.value">
+            {{ status.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Tipo:</label>
+        <select v-model="filters.type" @change="loadProjects">
+          <option value="">Todos los tipos</option>
+          <option v-for="type in projectTypes" :key="type.value" :value="type.value">
+            {{ type.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group" v-if="userRole === 'admin'">
+        <label>Cliente:</label>
+        <select v-model="filters.client_id" @change="loadProjects">
+          <option value="">Todos los clientes</option>
+          <option v-for="client in clients" :key="client.id" :value="client.id">
+            {{ client.display_name }} {{ client.company_name ? `(${client.company_name})` : '' }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Por página:</label>
+        <select v-model.number="filters.limit" @change="loadProjects">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Projects Table -->
+    <div class="table-container" v-if="!loading">
+      <table class="projects-table">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Proyecto</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Presupuesto</th>
+            <th>Duración</th>
+            <th>Fecha Límite</th>
+            <th v-if="canEditProjects">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="project in projects" :key="project.id" class="project-row">
+            <td>
+              <span class="project-code">{{ project.project_code }}</span>
+            </td>
+            <td>
+              <div class="project-info">
+                <strong>{{ project.name }}</strong>
+                <p v-if="project.description">{{ project.description }}</p>
+              </div>
+            </td>
+            <td>
+              <div class="client-info">
+                <strong>{{ project.client_name }}</strong>
+                <p v-if="project.company_name">{{ project.company_name }}</p>
+                <small>{{ project.client_email }}</small>
+              </div>
+            </td>
+            <td>
+              <Chip :color="getTypeInfo(project.type).color" :text="project.type" />
+            </td>
+            <td>
+              <Chip :color="getStatusInfo(project.status).color" :text="getStatusInfo(project.status).label" />
+            </td>
+            <td>{{ formatBudget(project.estimated_budget) }}</td>
+            <td>{{ formatDuration(project.estimated_duration) }}</td>
+            <td>{{ formatDate(project.deadline) }}</td>
+            <td v-if="canEditProjects">
+              <div class="actions">
+                <button @click="openEditModal(project)" class="edit-btn" title="Editar">
+                  <i class="icon-edit"></i>
+                </button>
+                <button @click="confirmDelete(project)" class="delete-btn" title="Eliminar">
+                  <i class="icon-delete"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty state -->
+      <div v-if="projects.length === 0" class="empty-state">
+        <div class="empty-content">
+          <i class="icon-projects"></i>
+          <h3>No hay proyectos</h3>
+          <p v-if="userRole === 'admin'">Comienza creando tu primer proyecto</p>
+          <p v-else>Aún no tienes proyectos asignados</p>
+          <WhiteButton v-if="canCreateProjects" @click="openCreateModal" icon="plus">
+            Crear Primer Proyecto
+          </WhiteButton>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div v-if="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando proyectos...</p>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" v-if="pagination.totalPages > 1">
+      <button @click="changePage(pagination.page - 1)" :disabled="pagination.page === 1" class="page-btn">
+        Anterior
+      </button>
+
+      <span class="page-info">
+        Página {{ pagination.page }} de {{ pagination.totalPages }}
+        ({{ pagination.total }} proyectos)
+      </span>
+
+      <button @click="changePage(pagination.page + 1)" :disabled="pagination.page === pagination.totalPages"
+        class="page-btn">
+        Siguiente
+      </button>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div v-if="showModal" class="modal-overlay" @click="closeModal">
+      <div class="modal" @click.stop>
+        <div class="modal-header">
+          <h3>{{ editingProject ? 'Editar Proyecto' : 'Crear Nuevo Proyecto' }}</h3>
+          <button @click="closeModal" class="close-btn">&times;</button>
+        </div>
+
+        <form @submit.prevent="saveProject" class="modal-content">
+          <div class="form-group">
+            <label for="projectName">Nombre del Proyecto*</label>
+            <input id="projectName" v-model="formData.name" type="text" required
+              placeholder="Ingrese el nombre del proyecto" />
+          </div>
+
+          <div class="form-group">
+            <label for="projectDescription">Descripción</label>
+            <textarea id="projectDescription" v-model="formData.description" rows="3"
+              placeholder="Describe brevemente el proyecto"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="projectType">Tipo de Proyecto*</label>
+              <select id="projectType" v-model="formData.type" required>
+                <option value="">Seleccionar tipo</option>
+                <option v-for="type in projectTypes" :key="type.value" :value="type.value">
+                  {{ type.label }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="projectClient">Cliente*</label>
+              <select id="projectClient" v-model="formData.client_id" required>
+                <option value="">Seleccionar cliente</option>
+                <option v-for="client in clients" :key="client.id" :value="client.id">
+                  {{ client.display_name }} {{ client.company_name ? `(${client.company_name})` : '' }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" v-if="editingProject">
+            <div class="form-group">
+              <label for="projectStatus">Estado</label>
+              <select id="projectStatus" v-model="formData.status">
+                <option v-for="status in projectStatuses" :key="status.value" :value="status.value">
+                  {{ status.label }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="projectBudget">Presupuesto Estimado (MXN)</label>
+              <input id="projectBudget" v-model.number="formData.estimated_budget" type="number" min="0" step="1000"
+                placeholder="0" />
+            </div>
+
+            <div class="form-group">
+              <label for="projectDuration">Duración Estimada (días)</label>
+              <input id="projectDuration" v-model.number="formData.estimated_duration" type="number" min="1"
+                placeholder="30" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="startDate">Fecha de Inicio</label>
+              <input id="startDate" v-model="formData.start_date" type="date" />
+            </div>
+
+            <div class="form-group">
+              <label for="deadline">Fecha Límite</label>
+              <input id="deadline" v-model="formData.deadline" type="date" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" @click="closeModal" class="cancel-btn">
+              Cancelar
+            </button>
+            <button type="submit" class="save-btn" :disabled="saving">
+              {{ saving ? 'Guardando...' : (editingProject ? 'Actualizar' : 'Crear') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .project-management {

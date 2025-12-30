@@ -1,216 +1,3 @@
-<template>
-  <div class="user-management">
-    <!-- Header -->
-    <div class="management-header">
-      <div class="header-content">
-        <h1 class="page-title">👥 Gestión de Usuarios</h1>
-        <p class="page-description">Administrar usuarios del sistema NexOrbs</p>
-      </div>
-
-      <button @click="showCreateModal = true" class="create-button">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Crear Usuario
-      </button>
-    </div>
-
-    <!-- Filters -->
-    <div class="filters-section">
-      <div class="filters">
-        <div class="filter-group">
-          <label>Rol:</label>
-          <select v-model="filters.role" @change="() => loadUsers()">
-            <option value="">Todos</option>
-            <option value="client">Cliente</option>
-            <option value="developer">Desarrollador</option>
-            <option value="admin">Administrador</option>
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label>Estado:</label>
-          <select v-model="filters.active" @change="() => loadUsers()">
-            <option value="">Todos</option>
-            <option value="true">Activo</option>
-            <option value="false">Inactivo</option>
-          </select>
-        </div>
-
-        <button @click="clearFilters" class="clear-filters">
-          Limpiar Filtros
-        </button>
-      </div>
-    </div>
-
-    <!-- Users Table -->
-    <div class="table-container">
-      <div v-if="loading" class="loading-state">
-        <div class="spinner"></div>
-        <p>Cargando usuarios...</p>
-      </div>
-
-      <div v-else-if="error" class="error-state">
-        <p>{{ error }}</p>
-        <button @click="() => loadUsers()" class="retry-button">
-          Reintentar
-        </button>
-      </div>
-
-      <table v-else class="users-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Último Login</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user in users" :key="user.id" class="user-row">
-            <td class="user-id">
-              <code>{{ user.id.substring(0, 8) }}...</code>
-            </td>
-            <td class="user-name">
-              <div class="user-info">
-                <strong>{{ user.display_name }}</strong>
-                <small v-if="user.company_name">{{ user.company_name }}</small>
-              </div>
-            </td>
-            <td class="user-email">{{ user.email }}</td>
-            <td class="user-role">
-              <span :class="`role-badge role-${user.role}`">
-                {{ getRoleLabel(user.role) }}
-              </span>
-            </td>
-            <td class="user-status">
-              <span :class="`status-badge ${user.is_active ? 'status-active' : 'status-inactive'}`">
-                {{ user.is_active ? 'Activo' : 'Inactivo' }}
-              </span>
-            </td>
-            <td class="user-login">
-              {{ formatDate(user.last_login) }}
-            </td>
-            <td class="user-actions">
-              <button @click="editUser(user)" class="action-button edit-button" title="Editar usuario">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-              </button>
-
-              <button @click="toggleUserStatus(user)"
-                :class="`action-button ${user.is_active ? 'deactivate-button' : 'activate-button'}`"
-                :title="user.is_active ? 'Desactivar usuario' : 'Activar usuario'">
-                <svg v-if="user.is_active" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L5.636 5.636" />
-                </svg>
-                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Pagination -->
-      <div v-if="pagination" class="pagination">
-        <button @click="changePage(pagination.page - 1)" :disabled="pagination.page === 1" class="page-button">
-          Anterior
-        </button>
-
-        <span class="page-info">
-          Página {{ pagination.page }} de {{ pagination.totalPages }}
-          ({{ pagination.total }} usuarios)
-        </span>
-
-        <button @click="changePage(pagination.page + 1)" :disabled="pagination.page >= pagination.totalPages"
-          class="page-button">
-          Siguiente
-        </button>
-      </div>
-    </div>
-
-    <!-- Create/Edit User Modal -->
-    <div v-if="showCreateModal || showEditModal" class="modal-overlay" @click="closeModals">
-      <div class="modal" @click.stop>
-        <div class="modal-header">
-          <h2>{{ showCreateModal ? 'Crear Usuario' : 'Editar Usuario' }}</h2>
-          <button @click="closeModals" class="close-button">&times;</button>
-        </div>
-
-        <form @submit.prevent="submitForm" class="modal-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Nombre Completo *</label>
-              <input v-model="formData.display_name" type="text" required class="form-input" placeholder="Juan Pérez" />
-            </div>
-
-            <div class="form-group">
-              <label>Email *</label>
-              <input v-model="formData.email" type="email" required class="form-input" placeholder="juan@empresa.com" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Rol *</label>
-              <select v-model="formData.role" required class="form-input">
-                <option value="">Seleccionar rol</option>
-                <option value="client">Cliente</option>
-                <option value="developer">Desarrollador</option>
-                <option value="admin">Administrador</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Teléfono</label>
-              <input v-model="formData.phone" type="tel" class="form-input" placeholder="+34 666 777 888" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Empresa</label>
-              <input v-model="formData.company_name" type="text" class="form-input"
-                placeholder="Nombre de la empresa" />
-            </div>
-
-            <div class="form-group">
-              <label>{{ showCreateModal ? 'Contraseña *' : 'Nueva Contraseña' }}</label>
-              <input v-model="formData.password" type="password" :required="showCreateModal" class="form-input"
-                :placeholder="showCreateModal ? 'Contraseña' : 'Dejar vacío para mantener actual'" />
-            </div>
-          </div>
-
-          <div v-if="showEditModal" class="form-row">
-            <div class="form-group">
-              <label class="checkbox-label">
-                <input v-model="formData.is_active" type="checkbox" class="form-checkbox" />
-                Usuario activo
-              </label>
-            </div>
-          </div>
-
-          <div class="modal-actions">
-            <button type="button" @click="closeModals" class="cancel-button">
-              Cancelar
-            </button>
-            <button type="submit" class="submit-button" :disabled="submitting">
-              {{ submitting ? 'Procesando...' : (showCreateModal ? 'Crear Usuario' : 'Actualizar Usuario') }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { AuthManager } from '@/helpers/authManager'
@@ -450,6 +237,219 @@ onMounted(() => {
   loadUsers()
 })
 </script>
+
+<template>
+  <div class="user-management">
+    <!-- Header -->
+    <div class="management-header">
+      <div class="header-content">
+        <h1 class="page-title">👥 Gestión de Usuarios</h1>
+        <p class="page-description">Administrar usuarios del sistema NexOrbs</p>
+      </div>
+
+      <button @click="showCreateModal = true" class="create-button">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Crear Usuario
+      </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+      <div class="filters">
+        <div class="filter-group">
+          <label>Rol:</label>
+          <select v-model="filters.role" @change="() => loadUsers()">
+            <option value="">Todos</option>
+            <option value="client">Cliente</option>
+            <option value="developer">Desarrollador</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Estado:</label>
+          <select v-model="filters.active" @change="() => loadUsers()">
+            <option value="">Todos</option>
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+          </select>
+        </div>
+
+        <button @click="clearFilters" class="clear-filters">
+          Limpiar Filtros
+        </button>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-container">
+      <div v-if="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando usuarios...</p>
+      </div>
+
+      <div v-else-if="error" class="error-state">
+        <p>{{ error }}</p>
+        <button @click="() => loadUsers()" class="retry-button">
+          Reintentar
+        </button>
+      </div>
+
+      <table v-else class="users-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Último Login</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.id" class="user-row">
+            <td class="user-id">
+              <code>{{ user.id.substring(0, 8) }}...</code>
+            </td>
+            <td class="user-name">
+              <div class="user-info">
+                <strong>{{ user.display_name }}</strong>
+                <small v-if="user.company_name">{{ user.company_name }}</small>
+              </div>
+            </td>
+            <td class="user-email">{{ user.email }}</td>
+            <td class="user-role">
+              <span :class="`role-badge role-${user.role}`">
+                {{ getRoleLabel(user.role) }}
+              </span>
+            </td>
+            <td class="user-status">
+              <span :class="`status-badge ${user.is_active ? 'status-active' : 'status-inactive'}`">
+                {{ user.is_active ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td class="user-login">
+              {{ formatDate(user.last_login) }}
+            </td>
+            <td class="user-actions">
+              <button @click="editUser(user)" class="action-button edit-button" title="Editar usuario">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+
+              <button @click="toggleUserStatus(user)"
+                :class="`action-button ${user.is_active ? 'deactivate-button' : 'activate-button'}`"
+                :title="user.is_active ? 'Desactivar usuario' : 'Activar usuario'">
+                <svg v-if="user.is_active" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
+                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div v-if="pagination" class="pagination">
+        <button @click="changePage(pagination.page - 1)" :disabled="pagination.page === 1" class="page-button">
+          Anterior
+        </button>
+
+        <span class="page-info">
+          Página {{ pagination.page }} de {{ pagination.totalPages }}
+          ({{ pagination.total }} usuarios)
+        </span>
+
+        <button @click="changePage(pagination.page + 1)" :disabled="pagination.page >= pagination.totalPages"
+          class="page-button">
+          Siguiente
+        </button>
+      </div>
+    </div>
+
+    <!-- Create/Edit User Modal -->
+    <div v-if="showCreateModal || showEditModal" class="modal-overlay" @click="closeModals">
+      <div class="modal" @click.stop>
+        <div class="modal-header">
+          <h2>{{ showCreateModal ? 'Crear Usuario' : 'Editar Usuario' }}</h2>
+          <button @click="closeModals" class="close-button">&times;</button>
+        </div>
+
+        <form @submit.prevent="submitForm" class="modal-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre Completo *</label>
+              <input v-model="formData.display_name" type="text" required class="form-input" placeholder="Juan Pérez" />
+            </div>
+
+            <div class="form-group">
+              <label>Email *</label>
+              <input v-model="formData.email" type="email" required class="form-input" placeholder="juan@empresa.com" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Rol *</label>
+              <select v-model="formData.role" required class="form-input">
+                <option value="">Seleccionar rol</option>
+                <option value="client">Cliente</option>
+                <option value="developer">Desarrollador</option>
+                <option value="admin">Administrador</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input v-model="formData.phone" type="tel" class="form-input" placeholder="+34 666 777 888" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Empresa</label>
+              <input v-model="formData.company_name" type="text" class="form-input"
+                placeholder="Nombre de la empresa" />
+            </div>
+
+            <div class="form-group">
+              <label>{{ showCreateModal ? 'Contraseña *' : 'Nueva Contraseña' }}</label>
+              <input v-model="formData.password" type="password" :required="showCreateModal" class="form-input"
+                :placeholder="showCreateModal ? 'Contraseña' : 'Dejar vacío para mantener actual'" />
+            </div>
+          </div>
+
+          <div v-if="showEditModal" class="form-row">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input v-model="formData.is_active" type="checkbox" class="form-checkbox" />
+                Usuario activo
+              </label>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" @click="closeModals" class="cancel-button">
+              Cancelar
+            </button>
+            <button type="submit" class="submit-button" :disabled="submitting">
+              {{ submitting ? 'Procesando...' : (showCreateModal ? 'Crear Usuario' : 'Actualizar Usuario') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .user-management {
