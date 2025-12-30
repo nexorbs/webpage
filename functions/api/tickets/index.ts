@@ -1,4 +1,3 @@
-// Tickets API - Create and list tickets
 import { AuthService } from '../../utils/auth'
 
 export interface Ticket {

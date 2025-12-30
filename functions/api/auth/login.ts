@@ -1,4 +1,3 @@
-// Login endpoint - authenticate users with ID + display_name + password
 import { AuthService } from '../../utils/auth'
 
 interface LoginRequest {

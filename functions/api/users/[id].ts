@@ -1,4 +1,3 @@
-// Update user - Admin only functionality
 import { AuthService } from '../../utils/auth'
 
 interface UpdateUserRequest {

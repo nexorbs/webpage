@@ -1,4 +1,3 @@
-// Individual ticket operations API
 import { AuthService } from '../../utils/auth'
 
 interface UpdateTicketRequest {
@@ -251,7 +250,7 @@ export async function onRequestPut(context: any): Promise<Response> {
 
       // Clients cannot assign tickets or change certain statuses
       if (
-        updates.assigned_to !== undefined ||
+        updates.assigned_developer_id !== undefined ||
         (updates.status && !['open', 'closed'].includes(updates.status))
       ) {
         return new Response(

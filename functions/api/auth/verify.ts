@@ -1,4 +1,3 @@
-// Verify JWT token and return user info
 import { AuthService } from '../../utils/auth'
 
 export async function onRequestPost(context: any): Promise<Response> {

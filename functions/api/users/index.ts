@@ -1,4 +1,3 @@
-// Users API - List and Create users
 import { AuthService } from '../../utils/auth'
 
 interface UserListItem {

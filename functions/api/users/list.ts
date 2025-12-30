@@ -1,4 +1,3 @@
-// List all users - Admin only functionality
 import { AuthService } from '../../utils/auth'
 
 interface UserListItem {
