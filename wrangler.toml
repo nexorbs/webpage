@@ -3,11 +3,16 @@ compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./dist"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "nexorbs-database"
+database_id = "b51d65ea-0d81-4011-a953-5ab852484893"
+
+[dev]
+port = 8080
+
 [placement]
 mode = "smart"
 
 [observability]
 enabled = true
-
-# Environment variables (set these in Cloudflare Dashboard or use wrangler secret)
-# BREVO_API_KEY = "your-brevo-api-key-here"
