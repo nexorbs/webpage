@@ -18,7 +18,7 @@ defineEmits(['click'])
       'relative z-10 flex items-center space-x-2 transition-colors duration-300',
       !disabled && 'group-focus:text-nexWhite group-hover:text-nexWhite'
     ]">
-      <span>{{ label }}</span>
+      <span class="text-center">{{ label }}</span>
       <slot></slot>
     </span>
     <span v-if="!disabled"
