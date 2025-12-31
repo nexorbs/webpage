@@ -17,8 +17,8 @@ const user = ref<any>(null)
 
 const currentRoute = router.currentRoute.value.path
 
-const navItems = computed(() => getCurrentNavItems())
-const sectionIds = computed(() => getCurrentSectionIds())
+const navItems = computed(() => getCurrentNavItems(currentRoute))
+const sectionIds = computed(() => getCurrentSectionIds(currentRoute))
 
 function checkAuthStatus() {
   isLoggedIn.value = AuthManager.isLoggedIn()

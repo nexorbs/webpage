@@ -8,21 +8,21 @@ const USER = AuthManager.getUser()?.display_name
 const adminNavItems = ['Dashboard', `${USER}`]
 const adminSectionIds = ['home', 'services', 'about', 'tech', 'contact', '']
 
-export function getCurrentNavItems(): string[] {
+export function getCurrentNavItems(currentRoute: string): string[] {
   const isLoggedIn = AuthManager.isLoggedIn()
   const user = AuthManager.getUser()
 
-  if (isLoggedIn && user?.role === 'admin') {
+  if (isLoggedIn && user?.role === 'admin' && currentRoute !== '/') {
     return adminNavItems
   }
   return baseNavItems
 }
 
-export function getCurrentSectionIds(): string[] {
+export function getCurrentSectionIds(currentRoute: string): string[] {
   const isLoggedIn = AuthManager.isLoggedIn()
   const user = AuthManager.getUser()
 
-  if (isLoggedIn && user?.role === 'admin') {
+  if (isLoggedIn && user?.role === 'admin' && currentRoute !== '/') {
     return adminSectionIds
   }
   return baseSectionIds
