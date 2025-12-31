@@ -232,6 +232,14 @@ const toggleUserStatus = async (user: User) => {
   }
 }
 
+async function copyUserId(userId: string) {
+  try {
+    await navigator.clipboard.writeText(userId)
+  } catch {
+    showErrorToast('Error al copiar el ID de usuario')
+  }
+}
+
 // Initialize
 onMounted(() => {
   loadUsers()
@@ -311,8 +319,8 @@ onMounted(() => {
         </thead>
         <tbody>
           <tr v-for="user in users" :key="user.id" class="user-row">
-            <td class="user-id">
-              <code>{{ user.id.substring(0, 8) }}...</code>
+            <td class="user-id cursor-pointer">
+              <code @click="copyUserId(user.id)">{{ user.id.substring(0, 8) }}...</code>
             </td>
             <td class="user-name">
               <div class="user-info">
@@ -497,9 +505,6 @@ onMounted(() => {
 }
 
 .filters-section {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid #334155;
-  border-radius: 12px;
   padding: 20px;
   margin-bottom: 24px;
 }

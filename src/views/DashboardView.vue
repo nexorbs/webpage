@@ -42,25 +42,6 @@ const handleLogout = () => {
 
 <template>
   <div class="dashboard-container bg-nexBlack">
-    <header class="dashboard-header">
-      <div class="header-content">
-
-        <div class="header-right">
-          <div class="user-info">
-            <div class="user-details">
-              <span class="user-name">{{ user?.display_name }}</span>
-              <span class="user-role" :class="`role-${user?.role}`">
-                {{ getRoleLabel(user?.role) }}
-              </span>
-            </div>
-            <button @click="handleLogout" class="logout-button">
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-
     <main class="dashboard-main">
       <div v-if="user?.role === 'admin'" class="role-section">
         <div class="section-header">
@@ -88,11 +69,13 @@ const handleLogout = () => {
             <button @click="router.push({ name: 'ticket-management' })" class="card-action">Gestionar Tickets</button>
           </div>
 
+          <!--
           <div class="dashboard-card">
             <h3>📈 Reportes</h3>
             <p>Estadísticas y métricas del sistema</p>
             <button class="card-action">Ver Reportes</button>
           </div>
+          -->
         </div>
       </div>
 
@@ -110,11 +93,13 @@ const handleLogout = () => {
             <button class="card-action">Ver Tickets</button>
           </div>
 
+          <!--
           <div class="dashboard-card">
             <h3>📋 Proyectos</h3>
             <p>Proyectos en los que colaboras</p>
             <button @click="router.push({ name: 'project-management' })" class="card-action">Ver Proyectos</button>
           </div>
+          -->
 
           <div class="dashboard-card">
             <h3>🎫 Tickets</h3>
@@ -122,11 +107,13 @@ const handleLogout = () => {
             <button @click="router.push({ name: 'ticket-management' })" class="card-action">Ver Tickets</button>
           </div>
 
+          <!--
           <div class="dashboard-card">
             <h3>⏱️ Tiempo</h3>
             <p>Registro de tiempo y actividades</p>
             <button class="card-action">Registrar Tiempo</button>
           </div>
+          -->
         </div>
       </div>
 
@@ -148,31 +135,6 @@ const handleLogout = () => {
             <h3>🎫 Mis Tickets</h3>
             <p>Estado de tus solicitudes y reportes</p>
             <button @click="router.push({ name: 'ticket-management' })" class="card-action">Ver Tickets</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- System Info (for all roles) -->
-      <div class="system-info">
-        <h3>Información del Sistema</h3>
-        <div class="info-grid">
-          <div class="info-item">
-            <strong>Usuario ID:</strong>
-            <code>{{ user?.id }}</code>
-          </div>
-          <div class="info-item">
-            <strong>Account ID:</strong>
-            <code>{{ user?.account_id }}</code>
-          </div>
-          <div class="info-item">
-            <strong>Email:</strong>
-            {{ user?.email }}
-          </div>
-          <div class="info-item">
-            <strong>Rol:</strong>
-            <span :class="`role-badge role-${user?.role}`">
-              {{ getRoleLabel(user?.role) }}
-            </span>
           </div>
         </div>
       </div>
