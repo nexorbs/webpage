@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import BackgroundOfStars from '@/components/BackgroundOfStars.vue'
-import WhiteLogo from '@/components/WhiteLogo.vue'
+import AnimatedLogo from '@/components/AnimatedLogo.vue'
 import { AuthManager } from '@/helpers/authManager'
 import { showSuccessToast, showErrorToast } from '@/helpers/sweetAlerts'
 import WhiteButton from '@/components/WhiteButton.vue'
@@ -18,7 +18,7 @@ const formData = ref({
 
 onMounted(() => {
   if (AuthManager.isLoggedIn()) {
-    router.push('/dashboard')
+    // router.push('/dashboard') // Commented for debugging
   }
 })
 
@@ -56,36 +56,46 @@ const handleLogin = async () => {
     </div>
 
     <div class="login-content">
+      <div class="logo-section">
+        <AnimatedLogo alt="NEXORBS Logo" class="md:size-96 object-contain size-24 select-none" draggable="false"
+          :speed="0.5" :color="'white'" />
+        <h1 class="text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-nexWhite block">NexOrbs Dashboard</h1>
+      </div>
+<!-- wawawawa -->
       <div class="login-card">
-        <div class="logo-section">
-          <WhiteLogo class="logo" />
-          <h1 class="title">NexOrbs Dashboard</h1>
-        </div>
-
+        <h2 class="text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-nexWhite block mb-8">Inicio de Sesión</h2>
         <form @submit.prevent="handleLogin" class="login-form">
-          <div class="form-group">
-            <label for="userId">ID de Usuario</label>
-            <input id="userId" v-model="formData.id" type="text" placeholder="a1b2c3d4e5f6g7h8" maxlength="16" required
-              class="form-input" :disabled="isLoading" />
-            <small>16 caracteres (ej: a1b2c3d4e5f6g7h8)</small>
+          <div>
+            <label htmlFor="userId" class="block text-md font-bold text-nexWhite mb-3 tracking-wide">
+              ID de Usuario
+            </label>
+            <input type="text" id="userId" name="userId" v-model="formData.id" maxlength="16" required :disabled="isLoading"
+              class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 focus:outline-none"
+              placeholder="a1b2c3d4e5f6g7h8" />
+            <small class="text-zinc-700">16 caracteres (ej: a1b2c3d4e5f6g7h8)</small>
           </div>
 
-          <div class="form-group">
-            <label for="displayName">Nombre de Usuario</label>
-            <input id="displayName" v-model="formData.displayName" type="text" placeholder="Juan Pérez" required
-              class="form-input" :disabled="isLoading" />
+          <div>
+            <label htmlFor="displayName" class="block text-md font-bold text-nexWhite mb-3 tracking-wide">
+              Nombre de Usuario
+            </label>
+            <input type="text" id="displayName" name="displayName" v-model="formData.displayName" required :disabled="isLoading"
+              class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 focus:outline-none"
+              placeholder="Juan Pérez" />
           </div>
 
-          <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input id="password" v-model="formData.password" type="password" placeholder="••••••••" required
-              class="form-input" :disabled="isLoading" />
+          <div>
+            <label htmlFor="password" class="block text-md font-bold text-nexWhite mb-3 tracking-wide">
+              Contraseña
+            </label>
+            <input type="password" id="password" name="password" v-model="formData.password" required :disabled="isLoading"
+              class="w-full px-0 py-3 bg-transparent border-0 border-b border-nexWhite/20 focus:border-nexWhite hover:border-nexWhite text-nexWhite placeholder-gray-500 transition-all duration-200 focus:outline-none"
+              placeholder="••••••••" />
           </div>
 
           <WhiteButton type="submit" :label="isLoading ? 'Iniciando...' : 'Iniciar Sesión'" :disabled="isLoading"
             class="w-full justify-center" />
         </form>
-
       </div>
     </div>
   </div>
@@ -112,27 +122,28 @@ const handleLogin = async () => {
 }
 
 .login-content {
+  display: flex;
+  flex-direction: row;
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 400px;
+  max-width: 1200px;
+  align-items: center;
 }
 
 .login-card {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid #333;
-  border-radius: 16px;
-  padding: 40px 32px;
-  backdrop-filter: blur(10px);
+  height: 100%;
+
+  width: 50%;
 }
 
 .logo-section {
-  text-align: center;
-  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   align-items: center;
   justify-content: center;
+  width: 50%;
 }
 
 .logo {
@@ -141,25 +152,12 @@ const handleLogin = async () => {
   margin-bottom: 16px;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 8px;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: #999;
-  margin: 0;
-}
 
 .login-form {
   margin-bottom: 24px;
-}
-
-.form-group {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .form-group label {

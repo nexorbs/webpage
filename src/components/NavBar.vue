@@ -154,7 +154,7 @@ onUnmounted(() => {
         isScrolled && !isMenuOpen ? 'max-md:border-b max-md:border-nexWhite/20' : '',
       ]">
         <div v-if="currentRoute.startsWith('/dashboard')" class="header-left">
-          <a href="/" class="flex">
+          <a href="/" class="flex gap-6 h-10 items-center">
             <WhiteLogo class="dashboard-logo" />
             <h1 class="dashboard-title">NexOrbs Dashboard</h1>
           </a>
