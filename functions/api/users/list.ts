@@ -57,8 +57,8 @@ export async function onRequestGet(context: any): Promise<Response> {
     const offset = (page - 1) * limit
 
     // Build query with filters
-    let baseQuery = 'SELECT * FROM users;'
-    let countQuery = 'SELECT COUNT(*) as total FROM users;'
+    let baseQuery = 'SELECT * FROM users'
+    let countQuery = 'SELECT COUNT(*) as total FROM users'
     const conditions: string[] = []
     const params: any[] = []
 
