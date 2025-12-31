@@ -1,16 +1,5 @@
+import { UpdateProjectRequest } from '../../entities/project.entities'
 import { AuthService } from '../../utils/auth'
-
-interface UpdateProjectRequest {
-  name?: string
-  description?: string
-  type?: 'Desarrollo Web' | 'Aplicación Móvil' | 'Consultoría Tech' | 'Solución Integral'
-  client_id?: string
-  status?: 'active' | 'completed' | 'cancelled' | 'on-hold'
-  estimated_budget?: number
-  estimated_duration?: number
-  start_date?: string
-  deadline?: string
-}
 
 // GET PROJECT BY ID
 export async function onRequestGet(context: any): Promise<Response> {

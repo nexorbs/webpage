@@ -1,10 +1,5 @@
 import { AuthService } from '../../utils/auth'
-
-interface LoginRequest {
-  id: string // 16 character hex ID
-  display_name: string // Juan Pérez
-  password: string // Plain password
-}
+import { LoginRequest } from '../../entities/auth.entities'
 
 export async function onRequestPost(context: any): Promise<Response> {
   try {

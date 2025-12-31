@@ -1,26 +1,5 @@
+import { CreateUserRequest } from '../../entities/user.entities'
 import { AuthService } from '../../utils/auth'
-
-interface UserListItem {
-  id: string
-  account_id: string
-  display_name: string
-  email: string
-  role: string
-  is_active: boolean
-  created_at: string
-  last_login: string | null
-  company_name: string | null
-  phone: string | null
-}
-
-interface CreateUserRequest {
-  account_id: string
-  display_name: string
-  email: string
-  password: string
-  role: 'developer' | 'client'
-  company_name?: string
-}
 
 // GET - List users
 export async function onRequestGet(context: any): Promise<Response> {

@@ -1,31 +1,5 @@
+import { CreateProjectRequest } from '../../entities/project.entities'
 import { AuthService } from '../../utils/auth'
-
-interface CreateProjectRequest {
-  name: string
-  description?: string
-  type: 'Desarrollo Web' | 'Aplicación Móvil' | 'Consultoría Tech' | 'Solución Integral'
-  client_id: string
-  estimated_budget?: number
-  estimated_duration?: number // days
-  start_date?: string
-  deadline?: string
-}
-
-interface Project {
-  id: string
-  project_code: string
-  client_id: string
-  name: string
-  description: string | null
-  type: string
-  status: string
-  estimated_budget: number | null
-  estimated_duration: number | null
-  start_date: string | null
-  deadline: string | null
-  created_at: string
-  updated_at: string
-}
 
 // Helper function to generate project code
 async function generateProjectCode(env: any, type: string): Promise<string> {

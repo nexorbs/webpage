@@ -1,13 +1,5 @@
+import { RegisterRequest } from '../../entities/auth.entities'
 import { AuthService } from '../../utils/auth'
-
-interface RegisterRequest {
-  display_name: string
-  email: string
-  password: string
-  role: 'client' | 'developer' | 'admin'
-  company_name?: string
-  phone?: string
-}
 
 export async function onRequestPost(context: any): Promise<Response> {
   try {

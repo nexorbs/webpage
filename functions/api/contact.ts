@@ -1,15 +1,5 @@
 import { TransactionalEmailsApi, SendSmtpEmail } from '@getbrevo/brevo'
-
-interface ContactFormData {
-  name: string
-  email: string
-  project?: 'web' | 'mobile' | 'consultoria' | 'integral'
-  message: string
-}
-
-interface Env {
-  BREVO_API_KEY: string
-}
+import { ContactFormData, Env } from '../entities/contact.entities'
 
 export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context

@@ -1,14 +1,5 @@
+import { UpdateUserRequest } from '../../entities/user.entities'
 import { AuthService } from '../../utils/auth'
-
-interface UpdateUserRequest {
-  display_name?: string
-  email?: string
-  role?: 'client' | 'developer' | 'admin'
-  is_active?: boolean
-  company_name?: string
-  phone?: string
-  password?: string // Optional password change
-}
 
 export async function onRequestPut(context: any): Promise<Response> {
   try {

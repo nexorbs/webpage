@@ -1,18 +1,5 @@
 import { AuthService } from '../../utils/auth'
 
-interface UserListItem {
-  id: string
-  account_id: string
-  display_name: string
-  email: string
-  role: string
-  is_active: boolean
-  created_at: string
-  last_login: string | null
-  company_name: string | null
-  phone: string | null
-}
-
 export async function onRequestGet(context: any): Promise<Response> {
   try {
     const { request, env } = context

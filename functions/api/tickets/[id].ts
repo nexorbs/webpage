@@ -1,27 +1,5 @@
+import { UpdateTicketRequest } from '../../entities/tickets.entities'
 import { AuthService } from '../../utils/auth'
-
-interface UpdateTicketRequest {
-  title?: string
-  description?: string
-  priority?: 'low' | 'medium' | 'high' | 'urgent'
-  status?:
-    | 'open'
-    | 'assigned'
-    | 'in_progress'
-    | 'waiting_client'
-    | 'resolved'
-    | 'client_approved'
-    | 'closed'
-  category?:
-    | 'bug'
-    | 'feature_request'
-    | 'support'
-    | 'consultation'
-    | 'billing'
-    | 'technical_issue'
-    | 'change_request'
-  assigned_developer_id?: string
-}
 
 // GET TICKET BY ID
 export async function onRequestGet(context: any): Promise<Response> {
