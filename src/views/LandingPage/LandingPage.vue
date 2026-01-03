@@ -2,6 +2,7 @@
 import ServicesView from './components/ServicesView.vue'
 import AboutUsView from './components/AboutUsView.vue'
 import TechnologiesStack from './components/TechnologiesStack.vue'
+import TechnicalSupportView from './components/TechnicalSupportView.vue'
 import ContactView from './components/ContactView.vue'
 import HomeView from './components/HomeView.vue'
 import BackgroundOfStars from '@/components/BackgroundOfStars.vue'
@@ -33,5 +34,6 @@ onMounted(() => {
   <ServicesView />
   <AboutUsView />
   <TechnologiesStack />
+  <TechnicalSupportView />
   <ContactView />
 </template>

@@ -1,7 +1,15 @@
 import { AuthManager } from '@/helpers/authManager'
 
-const baseNavItems = ['Inicio', 'Servicios', 'Nosotros', 'Tecnologías', 'Contacto', 'Login']
-const baseSectionIds = ['home', 'services', 'about', 'tech', 'contact']
+const baseNavItems = [
+  'Inicio',
+  'Servicios',
+  'Nosotros',
+  'Tecnologías',
+  'Servicio Técnico',
+  'Contacto',
+  'Login',
+]
+const baseSectionIds = ['home', 'services', 'about', 'tech', 'technical-support', 'contact']
 
 export function getCurrentNavItems(
   currentRoute: string,
