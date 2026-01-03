@@ -526,10 +526,16 @@ onMounted(() => {
               </div>
             </td>
             <td>
-              <Chip :color="getPriorityInfo(ticket.priority).color" :text="getPriorityInfo(ticket.priority).label" />
+              <span class="priority-badge"
+                :style="{ backgroundColor: getPriorityInfo(ticket.priority).color + '20', color: getPriorityInfo(ticket.priority).color }">
+                {{ getPriorityInfo(ticket.priority).label }}
+              </span>
             </td>
             <td>
-              <Chip :color="getStatusInfo(ticket.status).color" :text="getStatusInfo(ticket.status).label" />
+              <span class="status-badge"
+                :style="{ backgroundColor: getStatusInfo(ticket.status).color + '20', color: getStatusInfo(ticket.status).color }">
+                {{ getStatusInfo(ticket.status).label }}
+              </span>
             </td>
             <td v-if="userRole !== 'client'">
               <span v-if="ticket.developer_name" class="developer-name">
@@ -625,8 +631,8 @@ onMounted(() => {
           </div>
 
           <div class="form-group">
-            <label for="ticketDescription">Descripción</label>
-            <textarea id="ticketDescription" v-model="formData.description" rows="4"
+            <label for="ticketDescription">Descripción*</label>
+            <textarea id="ticketDescription" v-model="formData.description" rows="4" required
               placeholder="Proporciona detalles adicionales sobre el ticket"></textarea>
           </div>
 
@@ -940,6 +946,15 @@ onMounted(() => {
   display: inline-block;
 }
 
+.priority-badge,
+.status-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
 .developer-name {
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.875rem;
@@ -1234,19 +1249,15 @@ onMounted(() => {
 
 /* Icons */
 .icon-view::before {
-  content: '👁️';
+  content: '○';
 }
 
 .icon-edit::before {
-  content: '✏️';
+  content: '✎';
 }
 
 .icon-assign::before {
-  content: '👤';
-}
-
-.icon-tickets::before {
-  content: '🎫';
+  content: '→';
 }
 
 @media (max-width: 768px) {

@@ -19,12 +19,25 @@ const user = ref<any>(null)
 
 const currentRoute = router.currentRoute.value.path
 
-const navItems = computed(() => getCurrentNavItems(currentRoute))
+const navItems = computed(() => getCurrentNavItems(currentRoute, isLoggedIn.value, user.value))
 const sectionIds = computed(() => getCurrentSectionIds(currentRoute))
 
 function checkAuthStatus() {
   isLoggedIn.value = AuthManager.isLoggedIn()
   user.value = AuthManager.getUser()
+}
+
+function handleAuthChange() {
+  checkAuthStatus()
+}
+
+function handleWindowAuthChange(event: any) {
+  if (event.detail) {
+    isLoggedIn.value = event.detail.isLoggedIn
+    user.value = event.detail.user
+  } else {
+    checkAuthStatus()
+  }
 }
 
 function getRoleLabel(role?: string): string {
@@ -159,7 +172,10 @@ onMounted(() => {
   handleScroll()
   checkAuthStatus()
 
+  // Listen to auth changes
+  AuthManager.addEventListener('authChanged', handleAuthChange)
   window.addEventListener('storage', checkAuthStatus)
+  window.addEventListener('authChanged', handleWindowAuthChange)
 
   if (router.currentRoute.value.hash) {
     const sectionId = router.currentRoute.value.hash.replace('#', '')
@@ -194,6 +210,8 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('click', handleClickOutside)
   window.removeEventListener('storage', checkAuthStatus)
+  window.removeEventListener('authChanged', handleWindowAuthChange)
+  AuthManager.removeEventListener('authChanged', handleAuthChange)
 })
 </script>
 

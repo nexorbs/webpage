@@ -20,6 +20,7 @@ export interface AuthResponse {
 export class AuthManager {
   private static readonly TOKEN_KEY = 'nexorbs_auth_token'
   private static readonly USER_KEY = 'nexorbs_user_data'
+  private static eventTarget = new EventTarget()
 
   // Login user
   static async login(id: string, displayName: string, password: string): Promise<AuthResponse> {
@@ -42,6 +43,8 @@ export class AuthManager {
         // Store token and user data
         localStorage.setItem(this.TOKEN_KEY, result.data.token)
         localStorage.setItem(this.USER_KEY, JSON.stringify(result.data.user))
+        // Dispatch auth change event
+        this.dispatchAuthEvent()
       }
 
       return result
@@ -58,6 +61,8 @@ export class AuthManager {
   static logout(): void {
     localStorage.removeItem(this.TOKEN_KEY)
     localStorage.removeItem(this.USER_KEY)
+    // Dispatch auth change event
+    this.dispatchAuthEvent()
     window.location.href = '/dashboard/login'
   }
 
@@ -172,6 +177,26 @@ export class AuthManager {
         console.log('Token expired, redirecting to login')
       }
     }
+  }
+
+  // Event system for auth state changes
+  static addEventListener(type: 'authChanged', listener: EventListener): void {
+    this.eventTarget.addEventListener(type, listener)
+  }
+
+  static removeEventListener(type: 'authChanged', listener: EventListener): void {
+    this.eventTarget.removeEventListener(type, listener)
+  }
+
+  private static dispatchAuthEvent(): void {
+    this.eventTarget.dispatchEvent(
+      new CustomEvent('authChanged', {
+        detail: {
+          isLoggedIn: this.isLoggedIn(),
+          user: this.getUser(),
+        },
+      }),
+    )
   }
 }
 

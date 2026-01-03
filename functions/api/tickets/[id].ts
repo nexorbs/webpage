@@ -344,7 +344,15 @@ export async function onRequestPut(context: any): Promise<Response> {
     }
 
     if (updates.category !== undefined) {
-      const validCategories = ['bug', 'feature', 'support', 'improvement']
+      const validCategories = [
+        'bug',
+        'feature_request',
+        'support',
+        'consultation',
+        'billing',
+        'technical_issue',
+        'change_request',
+      ]
       if (!validCategories.includes(updates.category)) {
         return new Response(
           JSON.stringify({

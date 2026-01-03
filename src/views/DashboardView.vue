@@ -51,27 +51,27 @@ const handleLogout = () => {
 
         <div class="dashboard-grid">
           <div class="dashboard-card">
-            <h3>👥 Gestión de Usuarios</h3>
+            <h3>Gestión de Usuarios</h3>
             <p>Crear y administrar cuentas de clientes y desarrolladores</p>
             <button @click="router.push({ name: 'user-management' })" class="card-action">Gestionar Usuarios</button>
           </div>
 
           <div class="dashboard-card">
-            <h3>📊 Proyectos</h3>
+            <h3>Proyectos</h3>
             <p>Gestionar proyectos y asignaciones de clientes</p>
             <button @click="router.push({ name: 'project-management' })" class="card-action">Gestionar
               Proyectos</button>
           </div>
 
           <div class="dashboard-card">
-            <h3>🎫 Tickets</h3>
+            <h3>Tickets</h3>
             <p>Supervisar y asignar tickets a desarrolladores</p>
             <button @click="router.push({ name: 'ticket-management' })" class="card-action">Gestionar Tickets</button>
           </div>
 
           <!--
           <div class="dashboard-card">
-            <h3>📈 Reportes</h3>
+            <h3>Reportes</h3>
             <p>Estadísticas y métricas del sistema</p>
             <button class="card-action">Ver Reportes</button>
           </div>
@@ -88,28 +88,28 @@ const handleLogout = () => {
 
         <div class="dashboard-grid">
           <div class="dashboard-card">
-            <h3>🎯 Mis Tickets</h3>
+            <h3>Mis Tickets</h3>
             <p>Tickets asignados y en progreso</p>
             <button class="card-action">Ver Tickets</button>
           </div>
 
           <!--
           <div class="dashboard-card">
-            <h3>📋 Proyectos</h3>
+            <h3>Proyectos</h3>
             <p>Proyectos en los que colaboras</p>
             <button @click="router.push({ name: 'project-management' })" class="card-action">Ver Proyectos</button>
           </div>
           -->
 
           <div class="dashboard-card">
-            <h3>🎫 Tickets</h3>
+            <h3>Tickets</h3>
             <p>Tickets asignados y estado</p>
             <button @click="router.push({ name: 'ticket-management' })" class="card-action">Ver Tickets</button>
           </div>
 
           <!--
           <div class="dashboard-card">
-            <h3>⏱️ Tiempo</h3>
+            <h3>Tiempo</h3>
             <p>Registro de tiempo y actividades</p>
             <button class="card-action">Registrar Tiempo</button>
           </div>
@@ -126,13 +126,13 @@ const handleLogout = () => {
 
         <div class="dashboard-grid">
           <div class="dashboard-card">
-            <h3>📂 Mis Proyectos</h3>
+            <h3>Mis Proyectos</h3>
             <p>Proyectos activos y completados</p>
             <button @click="router.push({ name: 'project-management' })" class="card-action">Ver Mis Proyectos</button>
           </div>
 
           <div class="dashboard-card">
-            <h3>🎫 Mis Tickets</h3>
+            <h3>Mis Tickets</h3>
             <p>Estado de tus solicitudes y reportes</p>
             <button @click="router.push({ name: 'ticket-management' })" class="card-action">Ver Tickets</button>
           </div>

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { AuthManager } from '@/helpers/authManager'
 import { showSuccessToast, showErrorToast, showActionConfirmation } from '@/helpers/sweetAlerts'
+import WhiteButton from '@/components/WhiteButton.vue'
 
 // Types
 interface User {
@@ -106,12 +107,6 @@ const formatDate = (dateString: string | null): string => {
     hour: '2-digit',
     minute: '2-digit'
   })
-}
-
-const clearFilters = () => {
-  filters.value.role = ''
-  filters.value.active = ''
-  loadUsers(1)
 }
 
 const changePage = (page: number) => {
@@ -251,16 +246,11 @@ onMounted(() => {
     <!-- Header -->
     <div class="management-header">
       <div class="header-content">
-        <h1 class="page-title">👥 Gestión de Usuarios</h1>
+        <h1 class="page-title">Gestión de Usuarios</h1>
         <p class="page-description">Administrar usuarios del sistema NexOrbs</p>
       </div>
 
-      <button @click="showCreateModal = true" class="create-button">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Crear Usuario
-      </button>
+      <WhiteButton @click="showCreateModal = true" label="Crear usuario" />
     </div>
 
     <!-- Filters -->
@@ -284,10 +274,6 @@ onMounted(() => {
             <option value="false">Inactivo</option>
           </select>
         </div>
-
-        <button @click="clearFilters" class="clear-filters">
-          Limpiar Filtros
-        </button>
       </div>
     </div>
 
@@ -366,8 +352,20 @@ onMounted(() => {
         </tbody>
       </table>
 
+      <!-- Empty state -->
+      <div v-if="users.length === 0 && !loading && !error" class="empty-state">
+        <div class="empty-content">
+          <i class="icon-users"></i>
+          <h3>No hay usuarios</h3>
+          <p>Comienza creando tu primer usuario</p>
+          <button @click="showCreateModal = true" class="empty-action-btn">
+            Crear Primer Usuario
+          </button>
+        </div>
+      </div>
+
       <!-- Pagination -->
-      <div v-if="pagination" class="pagination">
+      <div v-if="pagination && users.length > 0" class="pagination">
         <button @click="changePage(pagination.page - 1)" :disabled="pagination.page === 1" class="page-button">
           Anterior
         </button>
@@ -461,28 +459,33 @@ onMounted(() => {
 
 <style scoped>
 .user-management {
-  padding: 24px;
+  padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+}
+
+.management-header {
+  margin-bottom: 2rem;
 }
 
 .management-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 32px;
+  gap: 2rem;
 }
 
 .header-content h1 {
-  font-size: 28px;
+  font-size: 2.5rem;
   font-weight: 700;
   color: white;
-  margin-bottom: 8px;
+  margin: 0;
 }
 
 .header-content p {
-  color: #94a3b8;
-  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0.5rem 0 0 0;
+  font-size: 1.1rem;
 }
 
 .create-button {
@@ -505,13 +508,16 @@ onMounted(() => {
 }
 
 .filters-section {
-  padding: 20px;
-  margin-bottom: 24px;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: end;
 }
 
 .filters {
   display: flex;
-  gap: 24px;
+  gap: 1rem;
   align-items: end;
   flex-wrap: wrap;
 }
@@ -519,44 +525,49 @@ onMounted(() => {
 .filter-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.25rem;
+  min-width: 150px;
 }
 
 .filter-group label {
-  color: #e2e8f0;
-  font-size: 14px;
-  font-weight: 600;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .filter-group select {
-  padding: 8px 12px;
-  border: 1px solid #475569;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
   color: white;
-  font-size: 14px;
+  font-size: 0.875rem;
+}
+
+.filter-group select option {
+  background-color: #1f1f1f;
+  color: white;
 }
 
 .clear-filters {
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid #64748b;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
-  color: #94a3b8;
+  color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
 }
 
 .clear-filters:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .table-container {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid #334155;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .loading-state,
@@ -565,18 +576,18 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px;
-  color: #94a3b8;
+  padding: 4rem 2rem;
+  color: white;
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #334155;
-  border-top: 3px solid #0ea5e9;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #00d4ff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 @keyframes spin {
@@ -595,26 +606,26 @@ onMounted(() => {
 }
 
 .users-table th {
-  background: rgba(0, 0, 0, 0.5);
-  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   font-weight: 600;
-  padding: 16px;
+  padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #334155;
-  font-size: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.875rem;
 }
 
 .user-row {
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   transition: background-color 0.2s ease;
 }
 
 .user-row:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .users-table td {
-  padding: 16px;
+  padding: 1rem;
   color: white;
   vertical-align: middle;
 }
@@ -722,25 +733,24 @@ onMounted(() => {
 
 .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid #334155;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .page-button {
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid #475569;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
 }
 
 .page-button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .page-button:disabled {
@@ -749,8 +759,49 @@ onMounted(() => {
 }
 
 .page-info {
-  color: #94a3b8;
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+}
+
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-content i {
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 1rem;
+}
+
+.empty-content h3 {
+  color: white;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+.empty-content p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+}
+
+.empty-action-btn {
+  padding: 0.75rem 1.5rem;
+  background: #00d4ff;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.empty-action-btn:hover {
+  background: #00b8e6;
+}
+
+.icon-users::before {
+  content: '◉';
 }
 
 /* Modal styles */

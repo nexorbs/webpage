@@ -364,10 +364,30 @@ onMounted(() => {
               </div>
             </td>
             <td>
-              <Chip :color="getTypeInfo(project.type).color" :text="project.type" />
+              <span class="type-chip" :style="{
+                backgroundColor: getTypeInfo(project.type)?.color || '#3b82f6',
+                color: 'white',
+                padding: '4px 8px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: '600',
+                display: 'inline-block'
+              }">
+                {{ getTypeInfo(project.type)?.label || project.type }}
+              </span>
             </td>
             <td>
-              <Chip :color="getStatusInfo(project.status).color" :text="getStatusInfo(project.status).label" />
+              <span class="status-chip" :style="{
+                backgroundColor: getStatusInfo(project.status)?.color || '#10b981',
+                color: 'white',
+                padding: '4px 8px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: '600',
+                display: 'inline-block'
+              }">
+                {{ getStatusInfo(project.status)?.label || project.status }}
+              </span>
             </td>
             <td>{{ formatBudget(project.estimated_budget) }}</td>
             <td>{{ formatDuration(project.estimated_duration) }}</td>
@@ -906,15 +926,15 @@ onMounted(() => {
 
 /* Icons (using Unicode or add icon font) */
 .icon-edit::before {
-  content: '✏️';
+  content: '✎';
 }
 
 .icon-delete::before {
-  content: '🗑️';
+  content: '✕';
 }
 
 .icon-projects::before {
-  content: '📁';
+  content: '◌';
 }
 
 @media (max-width: 768px) {

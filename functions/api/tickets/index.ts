@@ -5,29 +5,36 @@ import { AuthService } from '../../utils/auth'
 async function generateTicketNumber(env: any): Promise<string> {
   const year = new Date().getFullYear()
 
-  // Get next counter
-  const counterResult = await env.DB.prepare(
-    'SELECT counter FROM sequence_counters WHERE type = ? AND year = ?',
-  )
-    .bind('ticket', year)
-    .first()
+  try {
+    // Try to get the current counter for this year
+    const counterResult = await env.DB.prepare(
+      'SELECT counter FROM sequence_counters WHERE type = ? AND year = ?',
+    )
+      .bind('ticket', year)
+      .first()
 
-  let counter = 1
+    let counter = 1
 
-  if (counterResult) {
-    counter = counterResult.counter + 1
-    // Update counter
-    await env.DB.prepare('UPDATE sequence_counters SET counter = ? WHERE type = ? AND year = ?')
-      .bind(counter, 'ticket', year)
-      .run()
-  } else {
-    // Create counter for this year
-    await env.DB.prepare('INSERT INTO sequence_counters (type, year, counter) VALUES (?, ?, ?)')
-      .bind('ticket', year, counter)
-      .run()
+    if (counterResult) {
+      counter = counterResult.counter + 1
+      // Update counter
+      await env.DB.prepare('UPDATE sequence_counters SET counter = ? WHERE type = ? AND year = ?')
+        .bind(counter, 'ticket', year)
+        .run()
+    } else {
+      // Use INSERT OR REPLACE to handle the case where type already exists
+      await env.DB.prepare(
+        'INSERT OR REPLACE INTO sequence_counters (type, year, counter) VALUES (?, ?, ?)',
+      )
+        .bind('ticket', year, counter)
+        .run()
+    }
+
+    return `NX-${year}-${counter.toString().padStart(3, '0')}`
+  } catch (error) {
+    console.error('Error generating ticket number:', error)
+    throw new Error('Error generating ticket number')
   }
-
-  return `NX-${year}-${counter.toString().padStart(3, '0')}`
 }
 
 // CREATE TICKET (POST)
