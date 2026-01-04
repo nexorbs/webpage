@@ -566,7 +566,7 @@ onMounted(() => {
 .table-container {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -602,60 +602,65 @@ onMounted(() => {
 
 .users-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
 }
 
 .users-table th {
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  font-weight: 600;
   padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
   font-size: 0.875rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.user-row {
+.users-table td {
+  padding: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: background-color 0.2s ease;
+  color: white;
 }
 
 .user-row:hover {
   background: rgba(255, 255, 255, 0.03);
 }
 
-.users-table td {
-  padding: 1rem;
-  color: white;
-  vertical-align: middle;
-}
-
 .user-id code {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px 8px;
-  border-radius: 4px;
   font-family: 'Courier New', monospace;
-  font-size: 12px;
-  color: #06b6d4;
+  background: rgba(0, 212, 255, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #00d4ff;
 }
 
 .user-info strong {
   display: block;
-  font-size: 14px;
-  font-weight: 600;
+  margin-bottom: 0.25rem;
 }
 
 .user-info small {
-  color: #94a3b8;
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+.user-email {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+}
+
+.user-login {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
 }
 
 .role-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
 }
 
 .role-admin {
@@ -674,11 +679,11 @@ onMounted(() => {
 }
 
 .status-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
 }
 
 .status-active {
@@ -693,42 +698,43 @@ onMounted(() => {
 
 .user-actions {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .action-button {
-  padding: 6px;
+  padding: 0.5rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  transition: all 0.2s;
 }
 
 .edit-button {
-  background: #3b82f6;
-  color: white;
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
 }
 
 .edit-button:hover {
-  background: #2563eb;
+  background: rgba(59, 130, 246, 0.3);
 }
 
 .activate-button {
-  background: #10b981;
-  color: white;
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
 }
 
 .activate-button:hover {
-  background: #059669;
+  background: rgba(16, 185, 129, 0.3);
 }
 
 .deactivate-button {
-  background: #ef4444;
-  color: white;
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
 }
 
 .deactivate-button:hover {
-  background: #dc2626;
+  background: rgba(239, 68, 68, 0.3);
 }
 
 .pagination {
@@ -964,18 +970,46 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .user-management {
-    padding: 16px;
+    padding: 1rem;
   }
 
   .management-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 1rem;
     align-items: stretch;
+  }
+
+  .header-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .header-content p {
+    font-size: 0.9rem;
+  }
+
+  .filters-section {
+    margin-bottom: 1.5rem;
   }
 
   .filters {
     flex-direction: column;
-    gap: 16px;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .filter-group {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .filter-group select {
+    width: 100%;
+  }
+
+  .table-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    border-radius: 0;
   }
 
   .form-row {
@@ -983,16 +1017,67 @@ onMounted(() => {
   }
 
   .modal {
-    margin: 16px;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    max-width: calc(100% - 2rem);
+  }
+
+  .modal-header {
+    padding: 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .modal-form {
+    padding: 1rem;
   }
 
   .users-table {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .users-table th,
   .users-table td {
-    padding: 8px;
+    padding: 0.5rem;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .page-info {
+    font-size: 0.8rem;
+  }
+
+  .user-info strong {
+    font-size: 0.8rem;
+  }
+
+  .user-info small {
+    font-size: 0.7rem;
+  }
+
+  .role-badge,
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .action-button {
+    padding: 0.4rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cancel-button,
+  .submit-button {
+    width: 100%;
   }
 }
 </style>

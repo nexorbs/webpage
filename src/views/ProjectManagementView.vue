@@ -606,12 +606,13 @@ onMounted(() => {
 .table-container {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .projects-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
 }
 
@@ -945,15 +946,30 @@ onMounted(() => {
   .header-content {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem;
+  }
+
+  .title-section h1 {
+    font-size: 1.75rem;
+  }
+
+  .title-section p {
+    font-size: 0.9rem;
   }
 
   .filters {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
   .filter-group {
     min-width: unset;
+    width: 100%;
+  }
+
+  .filter-group select {
+    width: 100%;
   }
 
   .form-row {
@@ -967,6 +983,38 @@ onMounted(() => {
   .projects-table th,
   .projects-table td {
     padding: 0.5rem;
+  }
+
+  .table-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    border-radius: 0;
+  }
+
+  .modal {
+    width: 95vw;
+    max-width: 95vw;
+  }
+
+  .modal-header {
+    padding: 1rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .page-info {
+    font-size: 0.8rem;
   }
 }
 </style>

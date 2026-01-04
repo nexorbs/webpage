@@ -19,6 +19,7 @@ const showDetailModal = ref(false);
 const editingTicket = ref<Ticket | null>(null);
 const selectedTicket = ref<Ticket | null>(null);
 const detailLoading = ref(false);
+const isKanbanView = ref(false);
 
 const filters = reactive({
   status: '',
@@ -62,7 +63,44 @@ const availableProjects = computed(() => {
     const userId = authManager.getUser()?.id;
     return projects.value.filter(p => p.client_id === userId);
   }
-  return [];
+  return projects.value; // developers can see all projects
+});
+
+// Kanban columns based on ticket statuses
+const kanbanColumns = computed(() => [
+  { key: 'open', title: 'Abiertos', color: '#ef4444' },
+  { key: 'assigned', title: 'Asignados', color: '#f59e0b' },
+  { key: 'in_progress', title: 'En Progreso', color: '#3b82f6' },
+  { key: 'waiting_client', title: 'Esperando Cliente', color: '#8b5cf6' },
+  { key: 'resolved', title: 'Resueltos', color: '#10b981' },
+  { key: 'client_approved', title: 'Aprobados', color: '#059669' },
+  { key: 'closed', title: 'Cerrados', color: '#6b7280' }
+]);
+
+// Group tickets by status for kanban view
+const ticketsByStatus = computed(() => {
+  const grouped: Record<string, Ticket[]> = {};
+
+  kanbanColumns.value.forEach(column => {
+    grouped[column.key] = tickets.value.filter(ticket => ticket.status === column.key);
+  });
+
+  return grouped;
+});
+
+// Filtered projects for kanban
+const filteredTicketsByStatus = computed(() => {
+  if (!filters.project_id) return ticketsByStatus.value;
+
+  const filtered: Record<string, Ticket[]> = {};
+
+  Object.keys(ticketsByStatus.value).forEach(status => {
+    filtered[status] = ticketsByStatus.value[status].filter(
+      ticket => ticket.project_id === filters.project_id
+    );
+  });
+
+  return filtered;
 });
 
 // Methods
@@ -394,6 +432,10 @@ const truncateText = (text: string, maxLength: number) => {
   return text.substring(0, maxLength) + '...';
 };
 
+const toggleView = () => {
+  isKanbanView.value = !isKanbanView.value;
+};
+
 // Lifecycle
 onMounted(() => {
   loadTickets();
@@ -409,11 +451,19 @@ onMounted(() => {
       <div class="header-content">
         <div class="title-section">
           <h1>Gestión de Tickets</h1>
-          <p>Administra y supervisa todos los tickets del sistema</p>
+          <p>Administra y da seguimiento a los tickets de soporte</p>
         </div>
-        <div class="actions" v-if="canCreateTickets">
-          <WhiteButton @click="openCreateModal" icon="plus">
-            Nuevo Ticket
+        <div class="header-actions">
+          <div class="view-toggle">
+            <button :class="['toggle-btn', { active: !isKanbanView }]" @click="isKanbanView = false">
+              <span class="icon">☰</span> Tabla
+            </button>
+            <button :class="['toggle-btn', { active: isKanbanView }]" @click="isKanbanView = true">
+              <span class="icon">⊞</span> Kanban
+            </button>
+          </div>
+          <WhiteButton v-if="canCreateTickets" @click="openCreateModal">
+            + Crear Ticket
           </WhiteButton>
         </div>
       </div>
@@ -421,68 +471,72 @@ onMounted(() => {
 
     <!-- Filters -->
     <div class="filters">
-      <div class="filter-group">
-        <label>Estado:</label>
-        <select v-model="filters.status" @change="loadTickets">
-          <option value="">Todos los estados</option>
-          <option v-for="status in ticketStatuses" :key="status.value" :value="status.value">
-            {{ status.label }}
-          </option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>Prioridad:</label>
-        <select v-model="filters.priority" @change="loadTickets">
-          <option value="">Todas las prioridades</option>
-          <option v-for="priority in ticketPriorities" :key="priority.value" :value="priority.value">
-            {{ priority.label }}
-          </option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>Categoría:</label>
-        <select v-model="filters.category" @change="loadTickets">
-          <option value="">Todas las categorías</option>
-          <option v-for="type in ticketTypes" :key="type.value" :value="type.value">
-            {{ type.icon }} {{ type.label }}
-          </option>
-        </select>
-      </div>
-
-      <div class="filter-group" v-if="userRole === 'admin'">
+      <!-- Project filter (always visible for kanban) -->
+      <div v-if="isKanbanView || userRole === 'admin'" class="filter-group">
         <label>Proyecto:</label>
         <select v-model="filters.project_id" @change="loadTickets">
           <option value="">Todos los proyectos</option>
-          <option v-for="project in projects" :key="project.id" :value="project.id">
+          <option v-for="project in availableProjects" :key="project.id" :value="project.id">
             {{ project.project_code }} - {{ project.name }}
           </option>
         </select>
       </div>
 
-      <div class="filter-group" v-if="userRole === 'admin'">
-        <label>Asignado a:</label>
-        <select v-model="filters.assigned_developer_id" @change="loadTickets">
-          <option value="">Todos los desarrolladores</option>
-          <option v-for="developer in developers" :key="developer.id" :value="developer.id">
-            {{ developer.display_name }}
-          </option>
-        </select>
-      </div>
+      <!-- Admin filters (only for table view) -->
+      <template v-if="!isKanbanView">
+        <div class="filter-group">
+          <label>Estado:</label>
+          <select v-model="filters.status" @change="loadTickets">
+            <option value="">Todos los estados</option>
+            <option v-for="status in ticketStatuses" :key="status.value" :value="status.value">
+              {{ status.label }}
+            </option>
+          </select>
+        </div>
 
-      <div class="filter-group">
-        <label>Por página:</label>
-        <select v-model.number="filters.limit" @change="loadTickets">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </select>
-      </div>
+        <div class="filter-group">
+          <label>Prioridad:</label>
+          <select v-model="filters.priority" @change="loadTickets">
+            <option value="">Todas las prioridades</option>
+            <option v-for="priority in ticketPriorities" :key="priority.value" :value="priority.value">
+              {{ priority.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Categoría:</label>
+          <select v-model="filters.category" @change="loadTickets">
+            <option value="">Todas las categorías</option>
+            <option v-for="type in ticketTypes" :key="type.value" :value="type.value">
+              {{ type.icon }} {{ type.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group" v-if="userRole === 'admin'">
+          <label>Asignado a:</label>
+          <select v-model="filters.assigned_developer_id" @change="loadTickets">
+            <option value="">Todos los desarrolladores</option>
+            <option v-for="developer in developers" :key="developer.id" :value="developer.id">
+              {{ developer.display_name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Por página:</label>
+          <select v-model.number="filters.limit" @change="loadTickets">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+      </template>
     </div>
 
     <!-- Tickets Table -->
-    <div class="table-container" v-if="!loading">
+    <div class="table-container" v-if="!loading && !isKanbanView">
       <table class="tickets-table">
         <thead>
           <tr>
@@ -578,6 +632,60 @@ onMounted(() => {
           <WhiteButton v-if="canCreateTickets" @click="openCreateModal" icon="plus">
             Crear Primer Ticket
           </WhiteButton>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kanban Board -->
+    <div class="kanban-container" v-if="!loading && isKanbanView">
+      <div class="kanban-board">
+        <div v-for="column in kanbanColumns" :key="column.key" class="kanban-column">
+          <div class="column-header" :style="{ borderTopColor: column.color }">
+            <h3>{{ column.title }}</h3>
+            <span class="count">{{ filteredTicketsByStatus[column.key]?.length || 0 }}</span>
+          </div>
+
+          <div class="column-content">
+            <div v-for="ticket in filteredTicketsByStatus[column.key]" :key="ticket.id" class="kanban-card"
+              @click="openTicketDetail(ticket)">
+              <div class="card-header">
+                <span class="ticket-number">#{{ ticket.ticket_number }}</span>
+                <Chip :text="getPriorityInfo(ticket.priority).label" :color="getPriorityInfo(ticket.priority).color"
+                  class="priority-chip" />
+              </div>
+
+              <h4 class="card-title">{{ ticket.title }}</h4>
+
+              <p v-if="ticket.description" class="card-description">
+                {{ truncateText(ticket.description, 80) }}
+              </p>
+
+              <div class="card-meta">
+                <span class="type-badge" :style="{
+                  backgroundColor: getTypeInfo(ticket.category).color + '33',
+                  color: getTypeInfo(ticket.category).color
+                }">
+                  {{ getTypeInfo(ticket.category).label }}
+                </span>
+
+                <span class="project-name">{{ ticket.project_name || 'N/A' }}</span>
+              </div>
+
+              <div class="card-footer">
+                <div class="assigned-info">
+                  <span v-if="ticket.developer_name" class="developer-name">
+                    👤 {{ ticket.developer_name }}
+                  </span>
+                  <span v-else class="unassigned">Sin asignar</span>
+                </div>
+                <span class="time-elapsed">{{ getTimeElapsed(ticket.created_at) }}</span>
+              </div>
+            </div>
+
+            <div v-if="!filteredTicketsByStatus[column.key]?.length" class="empty-column">
+              <p>No hay tickets</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -838,6 +946,51 @@ onMounted(() => {
   gap: 2rem;
 }
 
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toggle-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggle-btn .icon {
+  font-size: 1rem;
+}
+
+.toggle-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.toggle-btn.active {
+  background: rgba(0, 212, 255, 0.2);
+  color: #00d4ff;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
 .title-section h1 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -889,12 +1042,13 @@ onMounted(() => {
 .table-container {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tickets-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
 }
 
@@ -1260,6 +1414,174 @@ onMounted(() => {
   content: '→';
 }
 
+/* Kanban Styles */
+.kanban-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.kanban-board {
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  min-width: min-content;
+}
+
+.kanban-column {
+  flex: 0 0 320px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 300px);
+}
+
+.column-header {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
+  border-top: 3px solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-header h3 {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.column-header .count {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.column-content {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 0.75rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.kanban-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.kanban-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.card-header .ticket-number {
+  font-size: 0.75rem;
+}
+
+.card-header .priority-chip {
+  font-size: 0.7rem;
+}
+
+.card-title {
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.card-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem 0;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-meta .project-name {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-footer .developer-name {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-footer .unassigned {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.card-footer .time-elapsed {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.empty-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.empty-column p {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .ticket-management {
     padding: 1rem;
@@ -1268,15 +1590,47 @@ onMounted(() => {
   .header-content {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem;
+  }
+
+  .title-section h1 {
+    font-size: 1.75rem;
+  }
+
+  .title-section p {
+    font-size: 0.9rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .view-toggle {
+    width: 100%;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
   }
 
   .filters {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
   .filter-group {
     min-width: unset;
+    width: 100%;
+  }
+
+  .filter-group select {
+    width: 100%;
   }
 
   .form-row {
@@ -1290,6 +1644,107 @@ onMounted(() => {
   .tickets-table th,
   .tickets-table td {
     padding: 0.5rem;
+  }
+
+  /* Kanban responsive */
+  .kanban-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+
+  .kanban-board {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .kanban-column {
+    flex: 0 0 85vw;
+    max-width: 320px;
+    max-height: calc(100vh - 400px);
+  }
+
+  .column-header {
+    padding: 0.75rem;
+  }
+
+  .column-header h3 {
+    font-size: 0.75rem;
+  }
+
+  .column-header .count {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .column-content {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .kanban-card {
+    padding: 0.75rem;
+  }
+
+  .card-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 0.85rem;
+  }
+
+  .card-description {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-meta {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .card-meta .type-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .card-meta .project-name {
+    font-size: 0.7rem;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .card-footer .developer-name,
+  .card-footer .unassigned {
+    font-size: 0.7rem;
+  }
+
+  .card-footer .time-elapsed {
+    font-size: 0.65rem;
+  }
+
+  .empty-column {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .empty-column p {
+    font-size: 0.8rem;
+  }
+
+  /* Pagination responsive */
+  .pagination {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .page-info {
+    font-size: 0.8rem;
   }
 }
 
@@ -1499,32 +1954,108 @@ onMounted(() => {
 @media (max-width: 768px) {
   .detail-modal {
     width: 95vw;
+    max-width: 95vw;
     max-height: 95vh;
+    margin: 0;
+  }
+
+  .modal {
+    width: 95vw;
+    max-width: 95vw;
+  }
+
+  .modal-header {
+    padding: 1rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
   }
 
   .ticket-header {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
     align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .ticket-number-large {
+    font-size: 1rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .ticket-title {
+    font-size: 1.25rem;
+    padding: 0 1rem;
   }
 
   .details-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .detail-item strong {
+    font-size: 0.8rem;
+  }
+
+  .detail-item span {
+    font-size: 0.85rem;
+  }
+
+  .description-section {
+    padding: 0 1rem;
+  }
+
+  .description-section p {
+    padding: 0.75rem;
+    font-size: 0.875rem;
   }
 
   .detail-actions {
     flex-direction: column;
     align-items: stretch;
+    padding: 1rem;
+    gap: 0.75rem;
   }
 
   .action-btn {
     width: 100%;
     text-align: center;
+    padding: 0.65rem 1rem;
   }
 
   .status-actions {
     width: 100%;
     justify-content: space-between;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .status-select {
+    width: 100%;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .view-toggle {
+    width: 100%;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .kanban-column {
+    flex: 0 0 280px;
   }
 }
 </style>

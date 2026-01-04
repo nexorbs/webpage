@@ -390,6 +390,17 @@ export async function onRequestPut(context: any): Promise<Response> {
             },
           )
         }
+
+        // Auto-change status to 'assigned' when a developer is assigned by admin
+        // Only if status is not explicitly being updated and current status is 'open'
+        if (
+          payload.role === 'admin' &&
+          updates.status === undefined &&
+          existingTicket.status === 'open'
+        ) {
+          updateFields.push('status = ?')
+          updateParams.push('assigned')
+        }
       }
 
       updateFields.push('assigned_developer_id = ?')
